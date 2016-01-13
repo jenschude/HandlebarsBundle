@@ -1,0 +1,30 @@
+{
+  "name": "jays-de/handlebars-bundle",
+  "type": "symfony-bundle",
+  "description": "This Symfony3 bundle provides integration for the handlebars template engine.",
+  "keywords": ["templating", "handlebars", "symfony"],
+  "authors": [
+    {
+      "name": "Jens Schulze",
+      "email": "jens.schulze@commercetools.de"
+    },
+    {
+      "name": "Community contributions",
+      "homepage": "https://github.com/jays-de/HandlebarsBundle/contributors"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/jays-de/HandlebarsBundle/issues"
+  },
+  "require": {
+    "php": ">=5.5",
+    "symfony/framework-bundle": "^3.0",
+    "zordius/lightncandy": "^0.90"
+  },
+  "require-dev": {
+    "symfony/yaml": "^3.0"
+  },
+  "autoload": {
+    "psr-4": { "JaySDe\\HandlebarsBundle": "" }
+  }
+}
