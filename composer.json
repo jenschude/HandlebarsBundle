@@ -25,6 +25,6 @@
     "symfony/yaml": "^3.0"
   },
   "autoload": {
-    "psr-4": { "JaySDe\\HandlebarsBundle\\": "" }
+    "psr-4": { "JaySDe\\HandlebarsBundle\\": "src/" }
   }
 }
