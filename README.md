@@ -8,7 +8,7 @@ Installation
 
 ### Prerequisites
 
- * PHP
+ * Symfony3
  * composer
 
 
