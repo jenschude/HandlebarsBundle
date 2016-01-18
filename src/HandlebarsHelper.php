@@ -37,7 +37,9 @@ class HandlebarsHelper
         $interpolationSuffix = '__'
     ) {
         static::$translator = $translator;
-        static::$defaultNamespace = $defaultNamespace;
+        if (!is_null($defaultNamespace)) {
+            static::$defaultNamespace = $defaultNamespace;
+        }
         static::$interpolationPrefix = $interpolationPrefix;
         static::$interpolationSuffix = $interpolationSuffix;
     }
