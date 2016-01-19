@@ -46,7 +46,7 @@
         </service>
         <service id="handlebars.profile" class="Twig_Profiler_Profile" />
         <service id="data_collector.handlebars" class="JaySDe\HandlebarsBundle\DataCollector\HandlebarsDataCollector" public="false">
-            <tag name="data_collector" template="@WebProfiler/Collector/twig.html.twig" id="handlebars" priority="258" />
+            <tag name="data_collector" template="@Handlebars/handlebars.html.twig" id="handlebars" />
             <argument type="service" id="handlebars.profile" />
         </service>
     </services>
