@@ -15,7 +15,7 @@ Installation
 ### Installation
 
 ```bash
-composer require commercetools/php-sdk dev-master
+composer require jays-de/handlebars-bundle dev-master
 
 Composer will install the bundle to your project's `vendor/` directory.
 
@@ -36,7 +36,7 @@ public function registerBundles()
 }
 ```
 
-### 3. Enable the Smarty template engine in the config
+### 3. Enable the Handlebars template engine in the config
 
 ``` yml
     # app/config/config.yml
