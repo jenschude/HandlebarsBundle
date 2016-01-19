@@ -39,5 +39,14 @@
         <service id="handlebars.helper" class="JaySDe\HandlebarsBundle\HandlebarsHelper">
             <argument type="service" id="translator" />
         </service>
+        <service id="handlebars.extension.profiler" class="Commercetools\Sunrise\AppBundle\DependencyInjection\HandlebarsProfileExtension" public="false">
+            <argument type="service" id="handlebars.profile" />
+            <argument type="service" id="debug.stopwatch" on-invalid="null" />
+        </service>
+        <service id="handlebars.profile" class="Twig_Profiler_Profile" />
+        <service id="data_collector.handlebars" class="Commercetools\Sunrise\AppBundle\DataCollector\HandlebarsDataCollector" public="false">
+            <tag name="data_collector" template="@WebProfiler/Collector/twig.html.twig" id="handlebars" priority="258" />
+            <argument type="service" id="handlebars.profile" />
+        </service>
     </services>
 </container>

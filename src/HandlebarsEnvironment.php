@@ -29,8 +29,9 @@ class HandlebarsEnvironment
     protected $extensions = [];
     protected $autoReload;
     protected $debug;
+    private $profiler;
 
-    public function __construct(FilesystemLoader $loader, HandlebarsHelper $helper, $options = [])
+    public function __construct(FilesystemLoader $loader, HandlebarsHelper $helper, $options = [], HandlebarsProfileExtension $profiler)
     {
         $this->loader = $loader;
         $this->options = array_merge([
@@ -52,6 +53,7 @@ class HandlebarsEnvironment
         $this->debug = (bool) $this->options['debug'];
         $this->autoReload = null === $this->options['auto_reload'] ? $this->debug : (bool) $this->options['auto_reload'];
         $this->setCache($this->options['cache']);
+        $this->profiler = $profiler;
     }
 
     public function compile($name)
@@ -74,7 +76,12 @@ class HandlebarsEnvironment
     {
         $renderer = $this->loadTemplate($name);
 
-        return $renderer($context);
+        $profile = new \Twig_Profiler_Profile();
+        $this->profiler->enter($profile);
+        $html = $renderer($context);
+        $this->profiler->leave($profile);
+
+        return $html;
     }
 
     /**
