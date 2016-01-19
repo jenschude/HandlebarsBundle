@@ -25,14 +25,12 @@ class HandlebarsProfileExtension
 
     public function enter(\Twig_Profiler_Profile $profile)
     {
-        $this->actives[0]->addProfile($profile);
-        array_unshift($this->actives, $profile);
-
         if ($this->stopwatch && $profile->isTemplate()) {
             $this->events[$profile] = $this->stopwatch->start($profile->getName(), 'template');
         }
 
-        parent::enter($profile);
+        $this->actives[0]->addProfile($profile);
+        array_unshift($this->actives, $profile);
     }
 
     public function leave(\Twig_Profiler_Profile $profile)

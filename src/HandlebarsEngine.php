@@ -38,8 +38,7 @@ class HandlebarsEngine implements EngineInterface
 
     public function render($name, array $parameters = array())
     {
-        $renderer = $this->environment->loadTemplate($name);
-        return $renderer($parameters);
+        return $this->environment->render($name, $parameters);
     }
 
     public function exists($name)

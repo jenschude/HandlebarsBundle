@@ -76,10 +76,10 @@ class HandlebarsEnvironment
     {
         $renderer = $this->loadTemplate($name);
 
-        $profile = new \Twig_Profiler_Profile();
-        $this->profiler->enter($profile);
+        $templateProfile = new \Twig_Profiler_Profile($name, \Twig_Profiler_Profile::TEMPLATE, $name);
+        $this->profiler->enter($templateProfile);
         $html = $renderer($context);
-        $this->profiler->leave($profile);
+        $this->profiler->leave($templateProfile);
 
         return $html;
     }

@@ -14,6 +14,7 @@
             <argument type="service" id="handlebars.loader" />
             <argument type="service" id="handlebars.helper" />
             <argument />
+            <argument type="service" id="handlebars.extension.profiler" />
         </service>
         <service id="handlebars.template.paths" class="JaySDe\HandlebarsBundle\Loader\FilesystemLoader">
             <factory service="handlebars.loader.filesystem" method="getPaths" />
@@ -39,12 +40,12 @@
         <service id="handlebars.helper" class="JaySDe\HandlebarsBundle\HandlebarsHelper">
             <argument type="service" id="translator" />
         </service>
-        <service id="handlebars.extension.profiler" class="Commercetools\Sunrise\AppBundle\DependencyInjection\HandlebarsProfileExtension" public="false">
+        <service id="handlebars.extension.profiler" class="JaySDe\HandlebarsBundle\HandlebarsProfileExtension" public="false">
             <argument type="service" id="handlebars.profile" />
             <argument type="service" id="debug.stopwatch" on-invalid="null" />
         </service>
         <service id="handlebars.profile" class="Twig_Profiler_Profile" />
-        <service id="data_collector.handlebars" class="Commercetools\Sunrise\AppBundle\DataCollector\HandlebarsDataCollector" public="false">
+        <service id="data_collector.handlebars" class="JaySDe\HandlebarsBundle\DataCollector\HandlebarsDataCollector" public="false">
             <tag name="data_collector" template="@WebProfiler/Collector/twig.html.twig" id="handlebars" priority="258" />
             <argument type="service" id="handlebars.profile" />
         </service>
