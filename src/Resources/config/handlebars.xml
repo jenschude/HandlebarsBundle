@@ -38,6 +38,7 @@
             <tag name="templating.engine" />
         </service>
         <service id="handlebars.helper" class="JaySDe\HandlebarsBundle\HandlebarsHelper">
+            <argument type="service" id="fragment.handler" />
             <argument type="service" id="translator" />
         </service>
         <service id="handlebars.extension.profiler" class="JaySDe\HandlebarsBundle\HandlebarsProfileExtension" public="false">

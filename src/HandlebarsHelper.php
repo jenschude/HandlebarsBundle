@@ -7,10 +7,17 @@
 namespace JaySDe\HandlebarsBundle;
 
 
+use LightnCandy\SafeString;
+use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class HandlebarsHelper
 {
+    /**
+     * @var FragmentHandler
+     */
+    public static $handler;
+
     /**
      * @var TranslatorInterface
      */
@@ -31,11 +38,13 @@ class HandlebarsHelper
     public static $interpolationSuffix = '__';
 
     public function __construct(
+        FragmentHandler $handler,
         TranslatorInterface $translator = null,
         $defaultNamespace = null,
         $interpolationPrefix = '__',
         $interpolationSuffix = '__'
     ) {
+        static::$handler = $handler;
         static::$translator = $translator;
         if (!is_null($defaultNamespace)) {
             static::$defaultNamespace = $defaultNamespace;
@@ -70,5 +79,12 @@ class HandlebarsHelper
         } else {
             return \JaySDe\HandlebarsBundle\HandlebarsHelper::$translator->transChoice($context, $count, $args, $bundle, $locale);
         }
+    }
+
+    public static function esi($context, $options)
+    {
+        $handler = \JaySDe\HandlebarsBundle\HandlebarsHelper::$handler;
+        $result = new SafeString($handler->render($context, 'esi', $options));
+        return $result;
     }
 }
