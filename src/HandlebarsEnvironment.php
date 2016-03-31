@@ -38,17 +38,17 @@ class HandlebarsEnvironment
             'auto_reload' => null,
             'debug' => true,
             'flags' => LightnCandy::FLAG_BESTPERFORMANCE |
-                LightnCandy::FLAG_ERROR_EXCEPTION |
-                LightnCandy::FLAG_NAMEDARG |
-                LightnCandy::FLAG_ADVARNAME |
-                LightnCandy::FLAG_RUNTIMEPARTIAL |
                 LightnCandy::FLAG_HANDLEBARSJS |
-                LightnCandy::FLAG_ERROR_EXCEPTION,
-            'basedir' => $loader->getPaths(),
-            'fileext' => [
-                '.hbs',
-                '.handlebars'
-            ],
+                LightnCandy::FLAG_RUNTIMEPARTIAL,
+            'partialresolver' => function ($cx, $name) use ($loader) {
+                $extension = '';
+                if ($loader->exists($name . '.handlebars')) {
+                    $extension = '.handlebars';
+                } else if ($loader->exists($name . '.hbs')) {
+                    $extension = '.hbs';
+                }
+                return $loader->getSource($name . $extension);
+            },
         ], $options);
         $this->debug = (bool) $this->options['debug'];
         $this->autoReload = null === $this->options['auto_reload'] ? $this->debug : (bool) $this->options['auto_reload'];

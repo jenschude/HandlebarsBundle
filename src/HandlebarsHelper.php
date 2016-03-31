@@ -6,8 +6,6 @@
 
 namespace JaySDe\HandlebarsBundle;
 
-
-use LightnCandy\SafeString;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -75,16 +73,30 @@ class HandlebarsHelper
         }
 
         if (is_null($count)) {
-            return \JaySDe\HandlebarsBundle\HandlebarsHelper::$translator->trans($context, $args, $bundle, $locale);
+            $trans = \JaySDe\HandlebarsBundle\HandlebarsHelper::$translator->trans($context, $args, $bundle, $locale);
         } else {
-            return \JaySDe\HandlebarsBundle\HandlebarsHelper::$translator->transChoice($context, $count, $args, $bundle, $locale);
+            $trans = \JaySDe\HandlebarsBundle\HandlebarsHelper::$translator->transChoice($context, $count, $args, $bundle, $locale);
         }
+
+        return new \LightnCandy\SafeString($trans);
     }
 
     public static function esi($context, $options)
     {
         $handler = \JaySDe\HandlebarsBundle\HandlebarsHelper::$handler;
-        $result = new SafeString($handler->render($context, 'esi', $options));
+        $result = new \LightnCandy\SafeString($handler->render($context, 'esi', $options));
+        return $result;
+    }
+
+    public static function cms($context, $options)
+    {
+        $options = isset($options['hash']) ? $options['hash'] : [];
+        $bundle = isset($options['bundle']) ? $options['bundle'] . ':' : '';
+
+        $cmsKey = $bundle . $context;
+
+        $result = \JaySDe\HandlebarsBundle\HandlebarsHelper::trans($cmsKey, $options);
+
         return $result;
     }
 }
