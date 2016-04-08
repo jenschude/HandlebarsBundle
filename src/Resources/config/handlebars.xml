@@ -25,6 +25,8 @@
         </service>
         <service id="handlebars.loader" alias="handlebars.loader.filesystem" />
         <service id="handlebars.loader.filesystem" class="%handlebars.loader.filesystem.class%">
+            <argument type="service" id="templating.locator" />
+            <argument type="service" id="templating.name_parser" />
         </service>
         <service id="handlebars.cache_warmer" class="%handlebars.cache_warmer.class%" public="false">
             <tag name="kernel.cache_warmer" />
@@ -34,7 +36,6 @@
         <service id="templating.engine.handlebars" class="%templating.engine.handlebars.class%" public="false">
             <argument type="service" id="handlebars"/>
             <argument type="service" id="templating.name_parser"/>
-            <argument type="service" id="templating.locator" />
             <tag name="templating.engine" />
         </service>
         <service id="handlebars.helper" class="JaySDe\HandlebarsBundle\HandlebarsHelper">

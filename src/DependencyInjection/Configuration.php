@@ -19,7 +19,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('cache')->defaultValue('%kernel.cache_dir%/handlebars')->end()
                 ->booleanNode('debug')->defaultValue('%kernel.debug%')->end()
-                ->scalarNode('auto_reload')->end()
+                ->booleanNode('auto_reload')->defaultValue('%kernel.debug%')->end()
                 ->arrayNode('helpers')
                     ->prototype('scalar')->end()
                 ->end()

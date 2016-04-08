@@ -7,21 +7,21 @@
 namespace JaySDe\HandlebarsBundle\Cache;
 
 
+use Symfony\Component\Config\ConfigCache;
+
 class Filesystem
 {
-    const FORCE_BYTECODE_INVALIDATION = 1;
-
     private $directory;
-    private $options;
+    private $debug;
 
     /**
      * @param $directory string The root cache directory
-     * @param $options   int    A set of options
+     * @param bool $debug
      */
-    public function __construct($directory, $options = 0)
+    public function __construct($directory, $debug = false)
     {
         $this->directory = $directory;
-        $this->options = $options;
+        $this->debug = $debug;
     }
 
     public function generateKey($name)
@@ -29,6 +29,12 @@ class Filesystem
         $hash = hash('sha256', $name);
 
         return $this->directory.'/'.$hash[0].$hash[1].'/'.$hash.'.php';
+    }
+
+    public function isFresh($key)
+    {
+        $cache = new ConfigCache($key, $this->debug);
+        return $cache->isFresh();
     }
 
     /**
@@ -42,34 +48,12 @@ class Filesystem
     /**
      * {@inheritdoc}
      */
-    public function write($key, $content)
+    public function write($key, $content, $resources)
     {
-        $dir = dirname($key);
-        if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
-                throw new \RuntimeException(sprintf('Unable to create the cache directory (%s).', $dir));
-            }
-        } elseif (!is_writable($dir)) {
-            throw new \RuntimeException(sprintf('Unable to write in the cache directory (%s).', $dir));
-        }
+        $cache = new ConfigCache($key, $this->debug);
+        $cache->write($content, $resources);
 
-        $tmpFile = tempnam($dir, basename($key));
-        if (false !== @file_put_contents($tmpFile, $content) && @rename($tmpFile, $key)) {
-            @chmod($key, 0666 & ~umask());
-
-            if (self::FORCE_BYTECODE_INVALIDATION == ($this->options & self::FORCE_BYTECODE_INVALIDATION)) {
-                // Compile cached file into bytecode cache
-                if (function_exists('opcache_invalidate')) {
-                    opcache_invalidate($key, true);
-                } elseif (function_exists('apc_compile_file')) {
-                    apc_compile_file($key);
-                }
-            }
-
-            return;
-        }
-
-        throw new \RuntimeException(sprintf('Failed to write cache file "%s".', $key));
+        return;
     }
 
     /**

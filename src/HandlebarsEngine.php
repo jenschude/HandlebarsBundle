@@ -19,7 +19,6 @@ class HandlebarsEngine implements EngineInterface
 {
     protected $engine;
     protected $parser;
-    protected $locator;
     protected $environment;
 
     /**
@@ -29,11 +28,10 @@ class HandlebarsEngine implements EngineInterface
      * @param TemplateNameParserInterface $parser       A TemplateNameParserInterface instance
      * @param FileLocatorInterface        $locator      A FileLocatorInterface instance
      */
-    public function __construct(HandlebarsEnvironment $handlebars, TemplateNameParserInterface $parser, FileLocatorInterface $locator)
+    public function __construct(HandlebarsEnvironment $handlebars, TemplateNameParserInterface $parser)
     {
         $this->environment = $handlebars;
         $this->parser = $parser;
-        $this->locator = $locator;
     }
 
     public function render($name, array $parameters = array())

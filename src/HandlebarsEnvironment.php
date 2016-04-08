@@ -10,6 +10,9 @@ namespace JaySDe\HandlebarsBundle;
 use JaySDe\HandlebarsBundle\Cache\Filesystem;
 use JaySDe\HandlebarsBundle\Loader\FilesystemLoader;
 use LightnCandy\LightnCandy;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\Config\ConfigCacheFactory;
+use Symfony\Component\Config\Resource\FileResource;
 
 class HandlebarsEnvironment
 {
@@ -24,7 +27,6 @@ class HandlebarsEnvironment
      * @var FilesystemLoader
      */
     protected $loader;
-    private $lastModifiedExtension = 0;
 
     protected $extensions = [];
     protected $autoReload;
@@ -34,19 +36,21 @@ class HandlebarsEnvironment
     public function __construct(FilesystemLoader $loader, HandlebarsHelper $helper, $options = [], HandlebarsProfileExtension $profiler)
     {
         $this->loader = $loader;
+        $this->partials = $partials = new \ArrayObject();
         $this->options = array_merge([
             'auto_reload' => null,
             'debug' => true,
             'flags' => LightnCandy::FLAG_BESTPERFORMANCE |
                 LightnCandy::FLAG_HANDLEBARSJS |
                 LightnCandy::FLAG_RUNTIMEPARTIAL,
-            'partialresolver' => function ($cx, $name) use ($loader) {
+            'partialresolver' => function ($cx, $name) use ($loader, &$partials) {
                 $extension = '';
                 if ($loader->exists($name . '.handlebars')) {
                     $extension = '.handlebars';
                 } else if ($loader->exists($name . '.hbs')) {
                     $extension = '.hbs';
                 }
+                $partials[] = new FileResource($loader->getCacheKey($name . $extension));
                 return $loader->getSource($name . $extension);
             },
         ], $options);
@@ -63,11 +67,12 @@ class HandlebarsEnvironment
 
         $phpStr = '';
         try {
+            $this->partials->exchangeArray([new FileResource($this->loader->getCacheKey($name))]);
             $phpStr = LightnCandy::compile($source, $this->options);
         } catch (\Exception $e) {
             var_dump($e);
         }
-        $this->cache->write($cacheKey, '<?php // ' . $name . PHP_EOL . $phpStr);
+        $this->cache->write($cacheKey, '<?php // ' . $name . PHP_EOL . $phpStr, $this->partials->getArrayCopy());
 
         return $phpStr;
     }
@@ -87,15 +92,13 @@ class HandlebarsEnvironment
     /**
      * Sets the current cache implementation.
      *
-     * @param string|false $cache A Twig_CacheInterface implementation,
-     *                                                an absolute path to the compiled templates,
-     *                                                or false to disable cache
+     * @param string|false $cache an absolute path to the compiled templates directory
      */
     public function setCache($cache)
     {
         if (is_string($cache)) {
             $this->originalCache = $cache;
-            $this->cache = new Filesystem($cache);
+            $this->cache = new Filesystem($cache, $this->debug);
         } else {
             throw new \LogicException(sprintf('Cache can only be a string.'));
         }
@@ -124,17 +127,12 @@ class HandlebarsEnvironment
 
         if (!$this->isAutoReload() && file_exists($cacheKey)) {
             return $this->cache->load($cacheKey);
-        } else if ($this->isAutoReload() && $this->isTemplateFresh($name, $this->cache->getTimestamp($cacheKey))) {
+        } else if ($this->isAutoReload() && $this->cache->isFresh($cacheKey)) {
             return $this->cache->load($cacheKey);
         }
         $this->compile($name);
 
         return $this->cache->load($cacheKey);
-    }
-
-    public function isTemplateFresh($name, $time)
-    {
-        return $this->loader->isFresh($name, $time);
     }
 
     /**

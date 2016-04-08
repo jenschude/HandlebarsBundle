@@ -8,11 +8,16 @@ namespace JaySDe\HandlebarsBundle\Loader;
 
 
 use JaySDe\HandlebarsBundle\Error\LoaderException;
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 
 class FilesystemLoader
 {
     /** Identifier of the main namespace. */
     const MAIN_NAMESPACE = '__main__';
+
+    protected $locator;
+    protected $parser;
 
     protected $paths = [];
     protected $cache = [];
@@ -23,8 +28,10 @@ class FilesystemLoader
      *
      * @param string|array $paths A path or an array of paths where to look for templates
      */
-    public function __construct()
+    public function __construct(FileLocatorInterface $locator, TemplateNameParserInterface $parser)
     {
+        $this->locator = $locator;
+        $this->parser = $parser;
         $this->setPaths([]);
     }
 
@@ -150,14 +157,6 @@ class FilesystemLoader
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isFresh($name, $time)
-    {
-        return filemtime($this->findTemplate($name)) <= $time;
-    }
-
     protected function parseName($name, $default = self::MAIN_NAMESPACE)
     {
         if (isset($name[0]) && '@' == $name[0]) {
@@ -216,7 +215,14 @@ class FilesystemLoader
             }
         }
 
-        $this->errorCache[$name] = sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace]));
+        try {
+            $template = $this->parser->parse($template);
+            $realpath = $this->locator->locate($template);
+            if (false !== $realpath && null !== $realpath) {
+                return $this->cache[$name] = $realpath;
+            }
+        } catch (\Exception $e) {
+        }
 
         $this->errorCache[$name] = sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace]));
 
