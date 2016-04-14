@@ -8,10 +8,9 @@ namespace JaySDe\HandlebarsBundle;
 
 
 use JaySDe\HandlebarsBundle\Cache\Filesystem;
+use JaySDe\HandlebarsBundle\Error\LoaderException;
 use JaySDe\HandlebarsBundle\Loader\FilesystemLoader;
 use LightnCandy\LightnCandy;
-use Symfony\Component\Config\ConfigCache;
-use Symfony\Component\Config\ConfigCacheFactory;
 use Symfony\Component\Config\Resource\FileResource;
 
 class HandlebarsEnvironment
@@ -42,13 +41,17 @@ class HandlebarsEnvironment
             'debug' => true,
             'flags' => LightnCandy::FLAG_BESTPERFORMANCE |
                 LightnCandy::FLAG_HANDLEBARSJS |
-                LightnCandy::FLAG_RUNTIMEPARTIAL,
+                LightnCandy::FLAG_RUNTIMEPARTIAL |
+                LightnCandy::FLAG_ERROR_EXCEPTION,
             'partialresolver' => function ($cx, $name) use ($loader, &$partials) {
-                $extension = '';
+                $extension = false;
                 if ($loader->exists($name . '.handlebars')) {
                     $extension = '.handlebars';
                 } else if ($loader->exists($name . '.hbs')) {
                     $extension = '.hbs';
+                }
+                if ($extension === false) {
+                    return null;
                 }
                 $partials[] = new FileResource($loader->getCacheKey($name . $extension));
                 return $loader->getSource($name . $extension);
@@ -70,7 +73,7 @@ class HandlebarsEnvironment
             $this->partials->exchangeArray([new FileResource($this->loader->getCacheKey($name))]);
             $phpStr = LightnCandy::compile($source, $this->options);
         } catch (\Exception $e) {
-            var_dump($e);
+            throw new LoaderException($e->getMessage());
         }
         $this->cache->write($cacheKey, '<?php // ' . $name . PHP_EOL . $phpStr, $this->partials->getArrayCopy());
 
