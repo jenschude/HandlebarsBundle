@@ -24,6 +24,17 @@ class HandlebarsExtension extends Extension
         $handlebarsFilesystemLoaderDefinition = $container->getDefinition('handlebars.loader.filesystem');
 
         $config = $this->processConfiguration($configuration, $configs);
+
+        // Enable AsseticExtension if undefined
+        if (!isset($config['assetic'])) {
+            $config['assetic'] = array_key_exists('AsseticBundle', $container->getParameter('kernel.bundles'));
+        }
+        // Assetic Extension
+        if (true === $config['assetic']) {
+            $loader->load('assetic.xml');
+        }
+        $container->setParameter('handlebars.assetic', $config['assetic']);
+        
         // register user-configured paths
         foreach ($config['paths'] as $path => $namespace) {
             if (!$namespace) {
@@ -37,7 +48,7 @@ class HandlebarsExtension extends Extension
             $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($dir));
         }
         $container->addResource(new FileExistenceResource($dir));
-
+        
         // register bundles as Handlebars namespaces
         foreach ($container->getParameter('kernel.bundles') as $bundle => $class) {
             $dir = $container->getParameter('kernel.root_dir').'/Resources/'.$bundle.'/views';

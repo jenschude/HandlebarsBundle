@@ -17,6 +17,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('handlebars')
             ->fixXmlConfig('path')
             ->children()
+                ->booleanNode('assetic')->end()
                 ->scalarNode('cache')->defaultValue('%kernel.cache_dir%/handlebars')->end()
                 ->booleanNode('debug')->defaultValue('%kernel.debug%')->end()
                 ->booleanNode('auto_reload')->defaultValue('%kernel.debug%')->end()
