@@ -20,12 +20,12 @@
   },
   "require": {
     "php": ">=5.5",
-    "symfony/framework-bundle": "~2.8|^3.0",
+    "symfony/framework-bundle": "^2.8 || ^3.0",
     "zordius/lightncandy": "^0.93",
     "twig/twig": "*"
   },
   "require-dev": {
-    "symfony/yaml": "~2.8|^3.0",
+    "symfony/yaml": "^2.8 || ^3.0",
     "phpunit/phpunit": "^4.8 || ^5.0",
     "symfony/assetic-bundle": "~2.0"
   },
