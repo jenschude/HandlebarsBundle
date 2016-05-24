@@ -1,14 +1,16 @@
 HandlebarsBundle
 ============
 
-This [Symfony3](http://symfony.com/) bundle provides integration for the [Handlebars](http://handlebarsjs.com/) template engine using [LightnCandy](https://packagist.org/packages/zordius/lightncandy) as renderer.
+This [Symfony](http://symfony.com/) bundle provides integration for the [Handlebars](http://handlebarsjs.com/) template engine using [LightnCandy](https://packagist.org/packages/zordius/lightncandy) as renderer.
+
+It is a backport of jayS-de/HandlebarsBundle to Symfony 2.8.
 
 Installation
 ------------
 
 ### Prerequisites
 
- * Symfony3
+ * Symfony 2.8+
  * composer
 
 
@@ -64,11 +66,6 @@ This will render the file index.hbs in your `Resources/views` folder.
 Authors
 -------
 
-Jens Schulze - <jens.schulze@commercetools.de>
+This backport - [Steve Jordan](https://github.com/stevejordan)
 
-See also the list of [contributors](https://github.com/jayS-de/HandlebarsBundle/contributors) who participated in this project.
-
-Submitting bugs and feature requests
-------------------------------------
-
-Bugs and feature requests are tracked on [GitHub](https://github.com/jayS-de/HandlebarsBundle/issues).
+The upstream bundle - [Jens Schulze](https://github.com/jayS-de)
