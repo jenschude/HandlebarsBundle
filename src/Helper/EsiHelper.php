@@ -12,16 +12,16 @@ class EsiHelper implements HelperInterface
     /**
      * @var FragmentHandler
      */
-    private static $handler;
+    private $handler;
 
     public function __construct(FragmentHandler $handler)
     {
-        self::$handler = $handler;
+        $this->handler = $handler;
     }
 
-    public static function handle($context, $options)
+    public function handle($context, $options)
     {
-        $handler = self::$handler;
+        $handler = $this->handler;
         $result = new \LightnCandy\SafeString($handler->render($context, 'esi', $options));
         return $result;
     }

@@ -10,21 +10,21 @@ class CmsHelper implements HelperInterface
     /**
      * @var TranslationHelper
      */
-    private static $translationHelper;
+    private $translationHelper;
 
     public function __construct(TranslationHelper $translationHelper)
     {
-        self::$translationHelper = $translationHelper;
+        $this->translationHelper = $translationHelper;
     }
 
-    public static function handle($context, $options)
+    public function handle($context, $options)
     {
         $options = isset($options['hash']) ? $options['hash'] : [];
         $bundle = isset($options['bundle']) ? $options['bundle'] . ':' : '';
 
         $cmsKey = $bundle . $context;
 
-        $result = self::$translationHelper->handle($cmsKey, $options);
+        $result = $this->translationHelper->handle($cmsKey, $options);
 
         return $result;
     }

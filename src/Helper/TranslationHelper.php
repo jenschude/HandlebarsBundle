@@ -12,21 +12,21 @@ class TranslationHelper implements HelperInterface
     /**
      * @var TranslatorInterface
      */
-    private static $translator;
+    private $translator;
     /**
      * @var string
      */
-    private static $defaultNamespace = 'translations';
+    private $defaultNamespace = 'translations';
 
     /**
      * @var string
      */
-    private static $interpolationPrefix = '__';
+    private $interpolationPrefix = '__';
 
     /**
      * @var string
      */
-    private static $interpolationSuffix = '__';
+    private $interpolationSuffix = '__';
 
     public function __construct(
         TranslatorInterface $translator = null,
@@ -34,34 +34,34 @@ class TranslationHelper implements HelperInterface
         $interpolationPrefix = '__',
         $interpolationSuffix = '__'
     ) {
-        self::$translator = $translator;
+        $this->translator = $translator;
         if (!is_null($defaultNamespace)) {
-            self::$defaultNamespace = $defaultNamespace;
+            $this->defaultNamespace = $defaultNamespace;
         }
-        self::$interpolationPrefix = $interpolationPrefix;
-        self::$interpolationSuffix = $interpolationSuffix;
+        $this->interpolationPrefix = $interpolationPrefix;
+        $this->interpolationSuffix = $interpolationSuffix;
     }
 
-    public static function handle($context, $options)
+    public function handle($context, $options)
     {
         $options = isset($options['hash']) ? $options['hash'] : [];
         if (strstr($context, ':')) {
             list($bundle, $context) = explode(':', $context, 2);
             $options['bundle'] = $bundle;
         }
-        $bundle = isset($options['bundle']) ? $options['bundle'] : self::$defaultNamespace;
+        $bundle = isset($options['bundle']) ? $options['bundle'] : $this->defaultNamespace;
         $locale = isset($options['locale']) ? $options['locale'] : null;
         $count = isset($options['count']) ? $options['count'] : null;
         $args = [];
         foreach ($options as $key => $value) {
-            $key = self::$interpolationPrefix . $key . self::$interpolationSuffix;
+            $key = $this->interpolationPrefix . $key . $this->interpolationSuffix;
             $args[$key] = $value;
         }
 
         if (is_null($count)) {
-            $trans = self::$translator->trans($context, $args, $bundle, $locale);
+            $trans = $this->translator->trans($context, $args, $bundle, $locale);
         } else {
-            $trans = self::$translator->transChoice($context, $count, $args, $bundle, $locale);
+            $trans = $this->translator->transChoice($context, $count, $args, $bundle, $locale);
         }
 
         return new \LightnCandy\SafeString($trans);
