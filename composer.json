@@ -21,7 +21,7 @@
   "require": {
     "php": ">=5.5",
     "symfony/framework-bundle": "^3.0",
-    "zordius/lightncandy": "^0.92",
+    "zordius/lightncandy": "^0.93",
     "twig/twig": "*"
   },
   "require-dev": {

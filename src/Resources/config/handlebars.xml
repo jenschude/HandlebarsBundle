@@ -39,8 +39,21 @@
             <tag name="templating.engine" />
         </service>
         <service id="handlebars.helper" class="JaySDe\HandlebarsBundle\HandlebarsHelper">
-            <argument type="service" id="fragment.handler" />
+        </service>
+        <service id="handlebars.helper.json" class="JaySDe\HandlebarsBundle\Helper\JsonHelper">
+            <tag name="handlebars.helper" id="json" />
+        </service>
+        <service id="handlebars.helper.cms" class="JaySDe\HandlebarsBundle\Helper\CmsHelper">
+            <tag name="handlebars.helper" id="cms" />
+            <argument type="service" id="handlebars.helper.trans" />
+        </service>
+        <service id="handlebars.helper.trans" class="JaySDe\HandlebarsBundle\Helper\TranslationHelper">
+            <tag name="handlebars.helper" id="i18n" />
             <argument type="service" id="translator" />
+        </service>
+        <service id="handlebars.helper.esi" class="JaySDe\HandlebarsBundle\Helper\EsiHelper">
+            <tag name="handlebars.helper" id="esi" />
+            <argument type="service" id="fragment.handler" />
         </service>
         <service id="handlebars.extension.profiler" class="JaySDe\HandlebarsBundle\HandlebarsProfileExtension" public="false">
             <argument type="service" id="handlebars.profile" />
