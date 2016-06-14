@@ -34,7 +34,11 @@ class HandlebarsExtension extends Extension
             $loader->load('assetic.xml');
         }
         $container->setParameter('handlebars.assetic', $config['assetic']);
-        
+
+        foreach ($config['translation'] as $key => $value) {
+            $container->setParameter('handlebars.translation.' . $key, $value);
+        }
+
         // register user-configured paths
         foreach ($config['paths'] as $path => $namespace) {
             if (!$namespace) {
