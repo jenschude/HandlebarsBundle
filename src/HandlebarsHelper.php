@@ -6,97 +6,36 @@
 
 namespace JaySDe\HandlebarsBundle;
 
-use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
-use Symfony\Component\Translation\TranslatorInterface;
+use JaySDe\HandlebarsBundle\Helper\HelperInterface;
 
 class HandlebarsHelper
 {
-    /**
-     * @var FragmentHandler
-     */
-    public static $handler;
+    private $helperMethods = [];
+    private $helpers = [];
 
-    /**
-     * @var TranslatorInterface
-     */
-    public static $translator;
-    /**
-     * @var string
-     */
-    public static $defaultNamespace = 'translations';
-
-    /**
-     * @var string
-     */
-    public static $interpolationPrefix = '__';
-
-    /**
-     * @var string
-     */
-    public static $interpolationSuffix = '__';
-
-    public function __construct(
-        FragmentHandler $handler,
-        TranslatorInterface $translator = null,
-        $defaultNamespace = null,
-        $interpolationPrefix = '__',
-        $interpolationSuffix = '__'
-    ) {
-        static::$handler = $handler;
-        static::$translator = $translator;
-        if (!is_null($defaultNamespace)) {
-            static::$defaultNamespace = $defaultNamespace;
-        }
-        static::$interpolationPrefix = $interpolationPrefix;
-        static::$interpolationSuffix = $interpolationSuffix;
-    }
-
-    public static function json($context)
+    public function addHelper($id, $helper)
     {
-        return json_encode($context);
-    }
+        // This is a temporary measure until we decide on a common interface.
+        // I'm relaxing the argument type above, but doing the check here to
+        // determine the helper's invocation method
 
-    public static function trans($context, $options)
-    {
-        $options = isset($options['hash']) ? $options['hash'] : [];
-        if (strstr($context, ':')) {
-            list($bundle, $context) = explode(':', $context, 2);
-            $options['bundle'] = $bundle;
-        }
-        $bundle = isset($options['bundle']) ? $options['bundle'] : \JaySDe\HandlebarsBundle\HandlebarsHelper::$defaultNamespace;
-        $locale = isset($options['locale']) ? $options['locale'] : null;
-        $count = isset($options['count']) ? $options['count'] : null;
-        $args = [];
-        foreach ($options as $key => $value) {
-            $key = \JaySDe\HandlebarsBundle\HandlebarsHelper::$interpolationPrefix . $key . \JaySDe\HandlebarsBundle\HandlebarsHelper::$interpolationSuffix;
-            $args[$key] = $value;
-        }
-
-        if (is_null($count)) {
-            $trans = \JaySDe\HandlebarsBundle\HandlebarsHelper::$translator->trans($context, $args, $bundle, $locale);
+        if (is_a($helper, 'JaySDe\HandlebarsBundle\Helper\HelperInterface')) {
+            $method = 'handle';
         } else {
-            $trans = \JaySDe\HandlebarsBundle\HandlebarsHelper::$translator->transChoice($context, $count, $args, $bundle, $locale);
+            $method = 'execute';
         }
 
-        return new \LightnCandy\SafeString($trans);
+        $this->helperMethods[$id] = get_class($helper) . '::' . $method;
+        $this->helpers[$id] = [$helper, $method];
     }
 
-    public static function esi($context, $options)
+    public function getHelperMethods()
     {
-        $handler = \JaySDe\HandlebarsBundle\HandlebarsHelper::$handler;
-        $result = new \LightnCandy\SafeString($handler->render($context, 'esi', $options));
-        return $result;
+        return $this->helperMethods;
     }
 
-    public static function cms($context, $options)
+    public function getHelpers()
     {
-        $options = isset($options['hash']) ? $options['hash'] : [];
-        $bundle = isset($options['bundle']) ? $options['bundle'] . ':' : '';
-
-        $cmsKey = $bundle . $context;
-
-        $result = \JaySDe\HandlebarsBundle\HandlebarsHelper::trans($cmsKey, $options);
-
-        return $result;
+        return $this->helpers;
     }
 }

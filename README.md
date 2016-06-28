@@ -63,9 +63,24 @@ public function indexAction(Request $request)
 
 This will render the file index.hbs in your `Resources/views` folder.
 
+### Helper functions
+
+To add new helper functions to the handlebars engine, you just have to create a class implementing ```JaySDe\HandlebarsBundle\Helper\HelperInterface``` and create a service definition with the tag ```handlebars.helper```. The ID of the tag is the helpers block name inside handlebars templates.
+
+*Note: adherence to the ```HelperInterface``` has been relaxed for the backport so both JaySDe-style and SDC-style helpers can be added.*
+
+Example:
+
+```xml
+        <service id="handlebars.helper.trans" class="JaySDe\HandlebarsBundle\Helper\TranslationHelper">
+            <tag name="handlebars.helper" id="i18n" />
+            <argument type="service" id="translator" />
+        </service>
+```
+
 Authors
 -------
 
-This backport - [Steve Jordan](https://github.com/stevejordan)
+This backport - [Steve Jordan](https://github.com/stevejordan), [Brendan Quigley](https://github.com/beequeue)
 
 The upstream bundle - [Jens Schulze](https://github.com/jayS-de)

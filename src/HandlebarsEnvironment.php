@@ -32,17 +32,22 @@ class HandlebarsEnvironment
     protected $debug;
     private $profiler;
 
+    private $helper;
+
     public function __construct(FilesystemLoader $loader, HandlebarsHelper $helper, $options = [], HandlebarsProfileExtension $profiler)
     {
         $this->loader = $loader;
         $this->partials = $partials = new \ArrayObject();
+        $this->helper = $helper;
         $this->options = array_merge([
             'auto_reload' => null,
             'debug' => true,
             'flags' => LightnCandy::FLAG_BESTPERFORMANCE |
                 LightnCandy::FLAG_HANDLEBARSJS |
                 LightnCandy::FLAG_RUNTIMEPARTIAL |
+                LightnCandy::FLAG_EXTHELPER |
                 LightnCandy::FLAG_ERROR_EXCEPTION,
+            'helpers' => $helper->getHelperMethods(),
             'partialresolver' => function ($cx, $name) use ($loader, &$partials) {
                 $extension = false;
                 if ($loader->exists($name . '.handlebars')) {
@@ -86,7 +91,7 @@ class HandlebarsEnvironment
 
         $templateProfile = new \Twig_Profiler_Profile($name, \Twig_Profiler_Profile::TEMPLATE, $name);
         $this->profiler->enter($templateProfile);
-        $html = $renderer($context);
+        $html = $renderer($context, ['helpers' => $this->helper->getHelpers()]);
         $this->profiler->leave($templateProfile);
 
         return $html;
