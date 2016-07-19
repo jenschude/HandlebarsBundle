@@ -16,7 +16,7 @@ class TranslationHelper implements HelperInterface
     /**
      * @var string
      */
-    private $defaultNamespace = 'translations';
+    private $defaultNamespace = null;
 
     /**
      * @var string
