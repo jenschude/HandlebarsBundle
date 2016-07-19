@@ -6,15 +6,33 @@
 
 namespace JaySDe\HandlebarsBundle;
 
-use JaySDe\HandlebarsBundle\Helper\HelperInterface;
-
 class HandlebarsHelper
 {
+    private $interface;
+    private $handleMethod;
     private $helpers = [];
 
-    public function addHelper($id, HelperInterface $helper)
+    public function __construct($interface, $handleMethod)
     {
-        $this->helpers[$id] = [$helper, 'handle'];
+        $this->interface = $interface;
+        $this->handleMethod = $handleMethod;
+    }
+
+    public function addHelper($id, $helper)
+    {
+        if (!$helper instanceof $this->interface) {
+            throw new \InvalidArgumentException(
+                sprintf('Helper class "%s" is no instance of "%s"', get_class($helper), $this->interface)
+            );
+        }
+        $callback = [$helper, $this->handleMethod];
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException(
+                sprintf('Method "%s" doesn\'t exist in "%s"', $this->handleMethod, get_class($helper))
+            );
+        }
+
+        $this->helpers[$id] = $callback;
     }
 
     public function getHelperMethods()

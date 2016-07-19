@@ -8,6 +8,8 @@
         <parameter key="handlebars.loader.filesystem.class">JaySDe\HandlebarsBundle\Loader\FilesystemLoader</parameter>
         <parameter key="templating.engine.handlebars.class">JaySDe\HandlebarsBundle\HandlebarsEngine</parameter>
         <parameter key="handlebars.cache_warmer.class">JaySDe\HandlebarsBundle\CacheWarmer\HandlebarsCacheWarmer</parameter>
+        <parameter key="handlebars.helper_interface.class">JaySDe\HandlebarsBundle\Helper\HelperInterface</parameter>
+        <parameter key="handlebars.helper_interface.method">handle</parameter>
     </parameters>
     <services>
         <service id="handlebars" class="%handlebars.class%">
@@ -39,6 +41,8 @@
             <tag name="templating.engine" />
         </service>
         <service id="handlebars.helper" class="JaySDe\HandlebarsBundle\HandlebarsHelper">
+            <argument>%handlebars.helper_interface.class%</argument>
+            <argument>%handlebars.helper_interface.method%</argument>
         </service>
         <service id="handlebars.helper.json" class="JaySDe\HandlebarsBundle\Helper\JsonHelper">
             <tag name="handlebars.helper" id="json" />
