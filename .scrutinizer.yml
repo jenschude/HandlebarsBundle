@@ -15,5 +15,13 @@ before_commands:
 build:
     environment:
         php: '7.0'
+    tests:
+        override:
+            -
+                command: vendor/bin/phpunit --coverage-clover=coverage0
+                coverage:
+                    file: 'coverage0'
+                    format: 'php-clover'
+
 filter:
-    excluded_paths: [src/Tests/*, vendor/*]
+    excluded_paths: [src/Tests/*]
