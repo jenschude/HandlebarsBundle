@@ -7,7 +7,6 @@
 namespace JaySDe\HandlebarsBundle;
 
 use JaySDe\HandlebarsBundle\Helper\HelperInterface;
-use Symfony\Bundle\FrameworkBundle\Tests\Controller\InvokableController;
 
 class HandlebarsHelper
 {
