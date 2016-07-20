@@ -12,9 +12,13 @@ class HandlebarsHelper
 {
     private $helpers = [];
 
-    public function addHelper($id, HelperInterface $helper)
+    public function addHelper($id, $helper)
     {
-        $this->helpers[$id] = [$helper, 'handle'];
+        if ($helper instanceof HelperInterface) {
+            $this->helpers[$id] = [$helper, 'handle'];
+        } elseif(is_callable($helper)) {
+            $this->helpers[$id] = $helper;
+        }
     }
 
     public function getHelperMethods()

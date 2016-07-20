@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('translation')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('default_namespace')->defaultValue('translations')->end()
+                        ->scalarNode('default_namespace')->defaultValue(null)->end()
                         ->scalarNode('interpolation_prefix')->defaultValue('__')->end()
                         ->scalarNode('interpolation_suffix')->defaultValue('__')->end()
                     ->end()
