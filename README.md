@@ -68,10 +68,42 @@ To add new helper functions to the handlebars engine, you just have to create a 
 Example:
 
 ```xml
-        <service id="handlebars.helper.trans" class="JaySDe\HandlebarsBundle\Helper\TranslationHelper">
-            <tag name="handlebars.helper" id="i18n" />
-            <argument type="service" id="translator" />
-        </service>
+<service id="handlebars.helper.trans" class="JaySDe\HandlebarsBundle\Helper\TranslationHelper">
+	<tag name="handlebars.helper" id="i18n" />
+	<argument type="service" id="translator" />
+</service>
+```
+
+The helper registry also supports to register any callable. So it's possible to create a class with the magic __invoke() method and define a service for it
+
+```php
+class MyHelper{
+    public function __invoke($context, $options) {}
+}
+```
+
+```xml
+<service id="handlebars.helper.my" class="MyHelper">
+	<tag name="handlebars.helper" id="my" />
+</service>
+```
+
+or using a factory method returning an anonymous function for example
+
+```php
+class HelperFactory{
+    public function getMyHelper() {
+        return function($context, $options) {}
+    }
+}
+```
+
+```xml
+<service id="handlebar.helper_factory" class="HelperFactory" />
+<service id="handlebars.helper.trans" class="callable">
+	<factory service="handlebar.helper_factory" method="getMyHelper">
+	<tag name="handlebars.helper.my" id="my" />
+</service>
 ```
 
 Authors
