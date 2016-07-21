@@ -26,7 +26,6 @@ class HandlebarsEngine implements EngineInterface
      *
      * @param HandlebarsEnvironment       $handlebars   A HandlebarsEnvironment instance
      * @param TemplateNameParserInterface $parser       A TemplateNameParserInterface instance
-     * @param FileLocatorInterface        $locator      A FileLocatorInterface instance
      */
     public function __construct(HandlebarsEnvironment $handlebars, TemplateNameParserInterface $parser)
     {

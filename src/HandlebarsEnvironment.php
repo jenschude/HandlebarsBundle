@@ -15,23 +15,45 @@ use Symfony\Component\Config\Resource\FileResource;
 
 class HandlebarsEnvironment
 {
+    /**
+     * @var array
+     */
     protected $options;
 
     /**
      * @var Filesystem
      */
     protected $cache;
+
     /**
      * @var FilesystemLoader
      */
     protected $loader;
 
-    protected $extensions = [];
+    /**
+     * @var bool
+     */
     protected $autoReload;
+
+    /**
+     * @var bool
+     */
     protected $debug;
+
+    /**
+     * @var HandlebarsProfileExtension
+     */
     private $profiler;
 
+    /**
+     * @var HandlebarsHelper
+     */
     private $helper;
+
+    /**
+     * @var \ArrayObject
+     */
+    private $partials;
 
     public function __construct(
         FilesystemLoader $loader,

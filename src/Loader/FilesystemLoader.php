@@ -24,9 +24,9 @@ class FilesystemLoader
     protected $errorCache = [];
 
     /**
-     * Constructor.
-     *
-     * @param string|array $paths A path or an array of paths where to look for templates
+     * FilesystemLoader constructor.
+     * @param FileLocatorInterface $locator
+     * @param TemplateNameParserInterface $parser
      */
     public function __construct(FileLocatorInterface $locator, TemplateNameParserInterface $parser)
     {
@@ -222,6 +222,7 @@ class FilesystemLoader
                 return $this->cache[$name] = $realpath;
             }
         } catch (\Exception $e) {
+            // catch locator not found exceptions
         }
 
         $this->errorCache[$name] = sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace]));

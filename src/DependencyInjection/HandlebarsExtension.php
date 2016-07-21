@@ -8,6 +8,7 @@ namespace JaySDe\HandlebarsBundle\DependencyInjection;
 
 use LightnCandy\LightnCandy;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileExistenceResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -22,10 +23,25 @@ class HandlebarsExtension extends Extension
 
         $configuration = new Configuration();
 
-        $handlebarsFilesystemLoaderDefinition = $container->getDefinition('handlebars.loader.filesystem');
-
         $config = $this->processConfiguration($configuration, $configs);
 
+        $config['flags'] = $this->getFlags($config);
+
+
+        foreach ($config['translation'] as $key => $value) {
+            $container->setParameter('handlebars.translation.' . $key, $value);
+        }
+
+        $this->setupAssetic($loader, $config, $container);
+        $this->configurePath($config, $container);
+
+        $container->getDefinition('handlebars.cache')->replaceArgument(0, $config['cache']);
+        $container->getDefinition('handlebars.cache')->replaceArgument(1, $config['debug']);
+
+        $container->getDefinition('handlebars')->replaceArgument(2, $config);
+    }
+
+    private function getFlags($config) {
         $flags = 0;
         if (isset($config['flags'])) {
             foreach ($config['flags'] as $flag) {
@@ -40,14 +56,17 @@ class HandlebarsExtension extends Extension
         }
         // ensure base functionality with flag standalone disabled
         $flags = ($flags | LightnCandy::FLAG_BESTPERFORMANCE |
-            LightnCandy::FLAG_HANDLEBARSJS |
-            LightnCandy::FLAG_RUNTIMEPARTIAL |
-            LightnCandy::FLAG_HANDLEBARSLAMBDA |
-            LightnCandy::FLAG_EXTHELPER |
-            LightnCandy::FLAG_ERROR_EXCEPTION) & ~LightnCandy::FLAG_STANDALONEPHP;
+                LightnCandy::FLAG_HANDLEBARSJS |
+                LightnCandy::FLAG_RUNTIMEPARTIAL |
+                LightnCandy::FLAG_HANDLEBARSLAMBDA |
+                LightnCandy::FLAG_EXTHELPER |
+                LightnCandy::FLAG_ERROR_EXCEPTION) & ~LightnCandy::FLAG_STANDALONEPHP;
 
-        $config['flags'] = $flags;
+        return $flags;
+    }
 
+    private function setupAssetic(LoaderInterface $loader, $config, ContainerBuilder $container)
+    {
         // Enable AsseticExtension if undefined
         if (!isset($config['assetic'])) {
             $config['assetic'] = array_key_exists('AsseticBundle', $container->getParameter('kernel.bundles'));
@@ -58,9 +77,11 @@ class HandlebarsExtension extends Extension
         }
         $container->setParameter('handlebars.assetic', $config['assetic']);
 
-        foreach ($config['translation'] as $key => $value) {
-            $container->setParameter('handlebars.translation.' . $key, $value);
-        }
+    }
+
+    private function configurePath($config, ContainerBuilder $container)
+    {
+        $handlebarsFilesystemLoaderDefinition = $container->getDefinition('handlebars.loader.filesystem');
 
         // register user-configured paths
         foreach ($config['paths'] as $path => $namespace) {
@@ -75,7 +96,7 @@ class HandlebarsExtension extends Extension
             $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($dir));
         }
         $container->addResource(new FileExistenceResource($dir));
-        
+
         // register bundles as Handlebars namespaces
         foreach ($container->getParameter('kernel.bundles') as $bundle => $class) {
             $dir = $container->getParameter('kernel.root_dir').'/Resources/'.$bundle.'/views';
@@ -91,10 +112,5 @@ class HandlebarsExtension extends Extension
             }
             $container->addResource(new FileExistenceResource($dir));
         }
-
-        $container->getDefinition('handlebars.cache')->replaceArgument(0, $config['cache']);
-        $container->getDefinition('handlebars.cache')->replaceArgument(1, $config['debug']);
-
-        $container->getDefinition('handlebars')->replaceArgument(2, $config);
     }
 }
