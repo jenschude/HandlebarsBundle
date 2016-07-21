@@ -16,7 +16,7 @@ class TranslationHelperTest extends \PHPUnit_Framework_TestCase
         $translator = $this->prophesize('Symfony\Component\Translation\TranslatorInterface');
         $translator->trans('Hello world!', [], null, null)->willReturn('Hallo Welt!')->shouldBeCalled();
 
-        $helper = new TranslationHelper($translator->reveal());
+        $helper = new TranslationHelper($translator->reveal(), null, '%', '%');
         $trans = $helper->handle('Hello world!', []);
         $this->assertSame('Hallo Welt!', (string)$trans);
     }
@@ -26,7 +26,7 @@ class TranslationHelperTest extends \PHPUnit_Framework_TestCase
         $translator = $this->prophesize('Symfony\Component\Translation\TranslatorInterface');
         $translator->trans('Hello world!', ['%bundle%' => 'main'], 'main', null)->willReturn('Hallo Welt!')->shouldBeCalled();
 
-        $helper = new TranslationHelper($translator->reveal());
+        $helper = new TranslationHelper($translator->reveal(), null, '%', '%');
         $trans = $helper->handle('main:Hello world!', []);
         $this->assertSame('Hallo Welt!', (string)$trans);
     }
@@ -36,7 +36,7 @@ class TranslationHelperTest extends \PHPUnit_Framework_TestCase
         $translator = $this->prophesize('Symfony\Component\Translation\TranslatorInterface');
         $translator->trans('Hello world!', [], 'main', null)->willReturn('Hallo Welt!')->shouldBeCalled();
 
-        $helper = new TranslationHelper($translator->reveal(), 'main');
+        $helper = new TranslationHelper($translator->reveal(), 'main', '%', '%');
         $trans = $helper->handle('Hello world!', []);
         $this->assertSame('Hallo Welt!', (string)$trans);
     }
@@ -47,7 +47,7 @@ class TranslationHelperTest extends \PHPUnit_Framework_TestCase
         $translator->trans('Hello world!', ['__bundle%' => 'main'], 'main', null)
             ->willReturn('Hallo Welt!')->shouldBeCalled();
 
-        $helper = new TranslationHelper($translator->reveal(), null, '__');
+        $helper = new TranslationHelper($translator->reveal(), null, '__', '%');
         $trans = $helper->handle('main:Hello world!', []);
         $this->assertSame('Hallo Welt!', (string)$trans);
     }
@@ -80,7 +80,7 @@ class TranslationHelperTest extends \PHPUnit_Framework_TestCase
         $translator->trans('Hello world!', ['%bundle%' => 'main', '%locale%' => 'en'], 'main', 'en')
             ->willReturn('Hallo Welt!')->shouldBeCalled();
 
-        $helper = new TranslationHelper($translator->reveal());
+        $helper = new TranslationHelper($translator->reveal(), null, '%', '%');
         $trans = $helper->handle('main:Hello world!', ['hash' => ['locale' => 'en']]);
         $this->assertSame('Hallo Welt!', (string)$trans);
     }
@@ -91,7 +91,7 @@ class TranslationHelperTest extends \PHPUnit_Framework_TestCase
         $translator->transChoice('Hello world!', 3, ['%bundle%' => 'main', '%count%' => 3], 'main', null)
             ->willReturn('Hallo Welt!')->shouldBeCalled();
 
-        $helper = new TranslationHelper($translator->reveal());
+        $helper = new TranslationHelper($translator->reveal(), null, '%', '%');
         $trans = $helper->handle('main:Hello world!', ['hash' => ['count' => 3]]);
         $this->assertSame('Hallo Welt!', (string)$trans);
     }
@@ -103,7 +103,7 @@ class TranslationHelperTest extends \PHPUnit_Framework_TestCase
             'Hello world!', 3, ['%bundle%' => 'main', '%count%' => 3, '%locale%' => 'en'], 'main', 'en'
         )->willReturn('Hallo Welt!')->shouldBeCalled();
 
-        $helper = new TranslationHelper($translator->reveal());
+        $helper = new TranslationHelper($translator->reveal(), null, '%', '%');
         $trans = $helper->handle('main:Hello world!', ['hash' => ['count' => 3, 'locale' => 'en']]);
         $this->assertSame('Hallo Welt!', (string)$trans);
     }
@@ -115,7 +115,7 @@ class TranslationHelperTest extends \PHPUnit_Framework_TestCase
             'Hello world!', 3, ['%bundle%' => 'main', '%count%' => 3, '%locale%' => 'en'], 'main', 'en'
         )->willReturn('Hallo Welt!')->shouldBeCalled();
 
-        $helper = new TranslationHelper($translator->reveal());
+        $helper = new TranslationHelper($translator->reveal(), null, '%', '%');
         $trans = $helper->handle('Hello world!', ['hash' => ['bundle' => 'main', 'count' => 3, 'locale' => 'en']]);
         $this->assertSame('Hallo Welt!', (string)$trans);
     }

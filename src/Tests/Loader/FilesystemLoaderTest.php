@@ -6,10 +6,9 @@
 namespace JaySDe\HandlebarsBundle\Tests\Loader;
 
 use JaySDe\HandlebarsBundle\Loader\FilesystemLoader;
-use JaySDe\HandlebarsBundle\Tests\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 
-class FilesystemLoaderTest extends TestCase
+class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetSource()
     {

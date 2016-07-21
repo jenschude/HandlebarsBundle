@@ -18,23 +18,23 @@ class TranslationHelper implements HelperInterface
     /**
      * @var string
      */
-    private $defaultNamespace = null;
+    private $defaultNamespace;
 
     /**
      * @var string
      */
-    private $interpolationPrefix = null;
+    private $interpolationPrefix;
 
     /**
      * @var string
      */
-    private $interpolationSuffix = null;
+    private $interpolationSuffix;
 
     public function __construct(
         TranslatorInterface $translator = null,
-        $defaultNamespace = null,
-        $interpolationPrefix = '%',
-        $interpolationSuffix = '%'
+        $defaultNamespace,
+        $interpolationPrefix,
+        $interpolationSuffix
     ) {
         $this->translator = $translator;
         $this->defaultNamespace = $defaultNamespace;
