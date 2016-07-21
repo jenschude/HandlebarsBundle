@@ -14,6 +14,7 @@ class TranslationHelper implements HelperInterface
      * @var TranslatorInterface
      */
     private $translator;
+
     /**
      * @var string
      */
@@ -22,18 +23,18 @@ class TranslationHelper implements HelperInterface
     /**
      * @var string
      */
-    private $interpolationPrefix = '__';
+    private $interpolationPrefix = null;
 
     /**
      * @var string
      */
-    private $interpolationSuffix = '__';
+    private $interpolationSuffix = null;
 
     public function __construct(
         TranslatorInterface $translator = null,
         $defaultNamespace = null,
-        $interpolationPrefix = '__',
-        $interpolationSuffix = '__'
+        $interpolationPrefix = '%',
+        $interpolationSuffix = '%'
     ) {
         $this->translator = $translator;
         $this->defaultNamespace = $defaultNamespace;
@@ -73,7 +74,7 @@ class TranslationHelper implements HelperInterface
     {
         $args = [];
         foreach ($options as $key => $value) {
-            $key = $this->interpolationPrefix . $key . $this->interpolationSuffix;
+            $key = $this->interpolationPrefix.$key.$this->interpolationSuffix;
             $args[$key] = $value;
         }
         return $args;
@@ -81,6 +82,6 @@ class TranslationHelper implements HelperInterface
 
     private function getOptionValue($options, $key, $default = null)
     {
-        return isset($options[$key]) ? $options[$key]: $default;
+        return isset($options[$key]) ? $options[$key] : $default;
     }
 }
