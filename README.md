@@ -1,14 +1,14 @@
 HandlebarsBundle
 ============
 
-This [Symfony3](http://symfony.com/) bundle provides integration for the [Handlebars](http://handlebarsjs.com/) template engine using [LightnCandy](https://packagist.org/packages/zordius/lightncandy) as renderer.
+This [Symfony](http://symfony.com/) bundle provides integration for the [Handlebars](http://handlebarsjs.com/) template engine using [LightnCandy](https://packagist.org/packages/zordius/lightncandy) as renderer.
 
 Installation
 ------------
 
 ### Prerequisites
 
- * Symfony3
+ * Symfony 2.8+
  * composer
 
 
@@ -38,7 +38,7 @@ public function registerBundles()
 
 ### 3. Enable the Handlebars template engine in the config
 
-``` yml
+``` yaml
     # app/config/config.yml
     framework:
         templating:      { engines: ['twig', 'handlebars'] }
@@ -60,6 +60,19 @@ public function indexAction(Request $request)
 ```
 
 This will render the file index.hbs in your `Resources/views` folder.
+
+### Configuration flags
+
+It's possible to set or unset the different flags provided by LightnCandy. Therefore set in your config.yml the fields flags and excludedFlags. The bundle will ensure that default flags are set, to prevent a non working template engine. The complete list of flags can be found at the [LnC documentation](https://github.com/zordius/lightncandy#compile-options)
+
+```yaml
+ # app/config/config.yml
+handlebars:
+  flags:
+    - FLAG_BESTPERFORMANCE
+  excludedFlags:
+    - FLAG_STANDALONE
+```
 
 ### Helper functions
 

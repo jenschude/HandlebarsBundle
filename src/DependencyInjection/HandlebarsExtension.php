@@ -6,6 +6,7 @@
 
 namespace JaySDe\HandlebarsBundle\DependencyInjection;
 
+use LightnCandy\LightnCandy;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileExistenceResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,6 +25,28 @@ class HandlebarsExtension extends Extension
         $handlebarsFilesystemLoaderDefinition = $container->getDefinition('handlebars.loader.filesystem');
 
         $config = $this->processConfiguration($configuration, $configs);
+
+        $flags = 0;
+        if (isset($config['flags'])) {
+            foreach ($config['flags'] as $flag) {
+                $flags = $flags | constant('LightnCandy\LightnCandy::' . $flag);
+            }
+        }
+        if (isset($config['excludeFlags'])) {
+            foreach ($config['excludeFlags'] as $flag) {
+                $flags = $flags & ~constant('LightnCandy\LightnCandy::' . $flag);
+            }
+            unset($config['excludeFlags']);
+        }
+        // ensure base functionality with flag standalone disabled
+        $flags = ($flags | LightnCandy::FLAG_BESTPERFORMANCE |
+            LightnCandy::FLAG_HANDLEBARSJS |
+            LightnCandy::FLAG_RUNTIMEPARTIAL |
+            LightnCandy::FLAG_HANDLEBARSLAMBDA |
+            LightnCandy::FLAG_EXTHELPER |
+            LightnCandy::FLAG_ERROR_EXCEPTION) & ~LightnCandy::FLAG_STANDALONEPHP;
+
+        $config['flags'] = $flags;
 
         // Enable AsseticExtension if undefined
         if (!isset($config['assetic'])) {

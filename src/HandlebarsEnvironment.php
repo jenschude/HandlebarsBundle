@@ -44,18 +44,10 @@ class HandlebarsEnvironment
         $this->loader = $loader;
         $this->partials = $partials = new \ArrayObject();
         $this->helper = $helper;
-        $flags = (LightnCandy::FLAG_BESTPERFORMANCE |
-            LightnCandy::FLAG_HANDLEBARSJS |
-            LightnCandy::FLAG_RUNTIMEPARTIAL |
-            LightnCandy::FLAG_HANDLEBARSLAMBDA |
-            LightnCandy::FLAG_EXTHELPER |
-            LightnCandy::FLAG_ERROR_EXCEPTION) &
-            ~LightnCandy::FLAG_STANDALONEPHP
-        ;
+
         $this->options = array_merge([
             'auto_reload' => null,
             'debug' => true,
-            'flags' => $flags,
             'helpers' => $helper->getHelperMethods(),
             'partialresolver' => function ($cx, $name) use ($loader, &$partials) {
                 $extension = false;
