@@ -11,6 +11,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileExistenceResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
@@ -29,7 +30,7 @@ class HandlebarsExtension extends Extension
 
 
         foreach ($config['translation'] as $key => $value) {
-            $container->setParameter('handlebars.translation.' . $key, $value);
+            $container->setParameter('handlebars.translation.'.$key, $value);
         }
 
         $this->setupAssetic($loader, $config, $container);
@@ -45,12 +46,12 @@ class HandlebarsExtension extends Extension
         $flags = 0;
         if (isset($config['flags'])) {
             foreach ($config['flags'] as $flag) {
-                $flags = $flags | constant('LightnCandy\LightnCandy::' . $flag);
+                $flags = $flags | constant('LightnCandy\LightnCandy::'.$flag);
             }
         }
         if (isset($config['excludeFlags'])) {
             foreach ($config['excludeFlags'] as $flag) {
-                $flags = $flags & ~constant('LightnCandy\LightnCandy::' . $flag);
+                $flags = $flags & ~constant('LightnCandy\LightnCandy::'.$flag);
             }
             unset($config['excludeFlags']);
         }
@@ -81,21 +82,13 @@ class HandlebarsExtension extends Extension
 
     private function configurePath($config, ContainerBuilder $container)
     {
-        $handlebarsFilesystemLoaderDefinition = $container->getDefinition('handlebars.loader.filesystem');
+        $this->addConfigPath($config, $container);
+        $this->addContainerPath($container);
+    }
 
-        // register user-configured paths
-        foreach ($config['paths'] as $path => $namespace) {
-            if (!$namespace) {
-                $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($path));
-            } else {
-                $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($path, $namespace));
-            }
-        }
-        $dir = $container->getParameter('kernel.root_dir').'/Resources/views';
-        if (is_dir($dir)) {
-            $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($dir));
-        }
-        $container->addResource(new FileExistenceResource($dir));
+    private function addContainerPath(ContainerBuilder $container)
+    {
+        $handlebarsFilesystemLoaderDefinition = $container->getDefinition('handlebars.loader.filesystem');
 
         // register bundles as Handlebars namespaces
         foreach ($container->getParameter('kernel.bundles') as $bundle => $class) {
@@ -112,5 +105,24 @@ class HandlebarsExtension extends Extension
             }
             $container->addResource(new FileExistenceResource($dir));
         }
+    }
+
+    private function addConfigPath($config, ContainerBuilder $container)
+    {
+        $handlebarsFilesystemLoaderDefinition = $container->getDefinition('handlebars.loader.filesystem');
+
+        // register user-configured paths
+        foreach ($config['paths'] as $path => $namespace) {
+            if (!$namespace) {
+                $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($path));
+            } else {
+                $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($path, $namespace));
+            }
+        }
+        $dir = $container->getParameter('kernel.root_dir').'/Resources/views';
+        if (is_dir($dir)) {
+            $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($dir));
+        }
+        $container->addResource(new FileExistenceResource($dir));
     }
 }
