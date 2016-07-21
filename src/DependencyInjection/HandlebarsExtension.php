@@ -69,6 +69,9 @@ class HandlebarsExtension extends Extension
             $container->addResource(new FileExistenceResource($dir));
         }
 
+        $container->getDefinition('handlebars.cache')->replaceArgument(0, $config['cache']);
+        $container->getDefinition('handlebars.cache')->replaceArgument(1, $config['debug']);
+
         $container->getDefinition('handlebars')->replaceArgument(2, $config);
     }
 }

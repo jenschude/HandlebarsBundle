@@ -18,10 +18,10 @@ class FilesystemLoaderTest extends TestCase
         $locator
             ->expects($this->once())
             ->method('locate')
-            ->will($this->returnValue(__DIR__.'/../DependencyInjection/Fixtures/Resources/views/layout.html.hbs'))
+            ->will($this->returnValue(__DIR__.'/../Fixtures/Resources/views/layout.html.hbs'))
         ;
         $loader = new FilesystemLoader($locator, $parser);
-        $loader->addPath(__DIR__.'/../DependencyInjection/Fixtures/Resources/views', 'namespace');
+        $loader->addPath(__DIR__.'/../Fixtures/Resources/views', 'namespace');
         // Twig-style
         $this->assertEquals("This is a layout\n", $loader->getSource('@namespace/layout.html.hbs'));
         // Symfony-style
@@ -36,7 +36,7 @@ class FilesystemLoaderTest extends TestCase
         $locator
             ->expects($this->once())
             ->method('locate')
-            ->will($this->returnValue($template = __DIR__.'/../DependencyInjection/Fixtures/Resources/views/layout.html.hbs'))
+            ->will($this->returnValue($template = __DIR__.'/../Fixtures/Resources/views/layout.html.hbs'))
         ;
         $loader = new FilesystemLoader($locator, $parser);
 
@@ -93,7 +93,7 @@ class FilesystemLoaderTest extends TestCase
 
     /**
      * @expectedException \JaySDe\HandlebarsBundle\Error\LoaderException
-     * @expectedExceptionMessageRegExp /Unable to find template "name\.format\.engine" \(looked into: .*Tests.Loader.\.\..DependencyInjection.Fixtures.Resources.views\)/
+     * @expectedExceptionMessageRegExp /Unable to find template "name\.format\.engine" \(looked into: .*Tests.Loader.\.\..Fixtures.Resources.views\)/
      */
     public function testErrorIfTemplateDoesNotExist()
     {
@@ -101,7 +101,7 @@ class FilesystemLoaderTest extends TestCase
         $locator = $this->getMockBuilder('Symfony\Component\Config\FileLocatorInterface')->getMock();
 
         $loader = new FilesystemLoader($locator, $parser);
-        $loader->addPath(__DIR__.'/../DependencyInjection/Fixtures/Resources/views');
+        $loader->addPath(__DIR__.'/../Fixtures/Resources/views');
 
         $method = new \ReflectionMethod('JaySDe\HandlebarsBundle\Loader\FilesystemLoader', 'findTemplate');
         $method->setAccessible(true);

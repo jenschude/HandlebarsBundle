@@ -16,7 +16,6 @@ use Symfony\Component\Config\Resource\FileResource;
 class HandlebarsEnvironment
 {
     protected $options;
-    protected $originalCache;
 
     /**
      * @var Filesystem
@@ -34,7 +33,13 @@ class HandlebarsEnvironment
 
     private $helper;
 
-    public function __construct(FilesystemLoader $loader, HandlebarsHelper $helper, $options = [], HandlebarsProfileExtension $profiler)
+    public function __construct(
+        FilesystemLoader $loader,
+        HandlebarsHelper $helper,
+        $options = [],
+        Filesystem $cache,
+        HandlebarsProfileExtension $profiler
+    )
     {
         $this->loader = $loader;
         $this->partials = $partials = new \ArrayObject();
@@ -68,18 +73,18 @@ class HandlebarsEnvironment
         ], $options);
         $this->debug = (bool) $this->options['debug'];
         $this->autoReload = null === $this->options['auto_reload'] ? $this->debug : (bool) $this->options['auto_reload'];
-        $this->setCache($this->options['cache']);
+        $this->cache = $cache;
         $this->profiler = $profiler;
     }
 
     public function compile($name)
     {
-        $source = $this->loader->getSource($name);
+        $source = $this->getLoader()->getSource($name);
         $cacheKey = $this->getCacheFilename($name);
 
         $phpStr = '';
         try {
-            $this->partials->exchangeArray([new FileResource($this->loader->getCacheKey($name))]);
+            $this->partials->exchangeArray([new FileResource($this->getLoader()->getCacheKey($name))]);
             $phpStr = LightnCandy::compile($source, $this->options);
         } catch (\Exception $e) {
             throw new LoaderException($e->getMessage());
@@ -99,21 +104,6 @@ class HandlebarsEnvironment
         $this->profiler->leave($templateProfile);
 
         return $html;
-    }
-
-    /**
-     * Sets the current cache implementation.
-     *
-     * @param string|false $cache an absolute path to the compiled templates directory
-     */
-    public function setCache($cache)
-    {
-        if (is_string($cache)) {
-            $this->originalCache = $cache;
-            $this->cache = new Filesystem($cache, $this->debug);
-        } else {
-            throw new \LogicException(sprintf('Cache can only be a string.'));
-        }
     }
 
     public function getCacheFilename($name)
@@ -136,7 +126,6 @@ class HandlebarsEnvironment
     {
         $name = (string)$templateName;
         $cacheKey = $this->getCacheFilename($name);
-
         if (!$this->isAutoReload() && file_exists($cacheKey)) {
             return $this->cache->load($cacheKey);
         } else if ($this->isAutoReload() && $this->cache->isFresh($cacheKey)) {
