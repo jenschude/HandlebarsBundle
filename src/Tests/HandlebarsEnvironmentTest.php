@@ -294,4 +294,34 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('Hello world!', trim($environment->render('main', [])));
     }
+
+    /**
+     * @expectedException \JaySDe\HandlebarsBundle\Error\LoaderException
+     */
+    public function testCompileException()
+    {
+        $loader = $this->prophesize('JaySDe\HandlebarsBundle\Loader\FilesystemLoader');
+        $loader->getCacheKey('main')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
+        $loader->getSource('main')->willReturn('{{>test }}');
+        $loader->exists('test.handlebars')->willThrow(new \Exception());
+
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+
+        $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
+
+        $cache = $this->prophesize('JaySDe\HandlebarsBundle\Cache\Filesystem');
+
+        $cache->generateKey('main')->willReturn('main');
+        $environment = new HandlebarsEnvironment(
+            $loader->reveal(),
+            $helper->reveal(),
+            [
+                'auto_reload' => true,
+            ],
+            $cache->reveal(),
+            $profiler->reveal()
+        );
+
+        $environment->compile('main');
+    }
 }

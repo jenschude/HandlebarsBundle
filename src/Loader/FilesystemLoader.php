@@ -181,7 +181,7 @@ class FilesystemLoader
     protected function findTemplate($template, $throw = true)
     {
         $name = $this->normalizeName($template);
-
+        
         if (isset($this->cache[$name])) {
             return $this->cache[$name];
         }
