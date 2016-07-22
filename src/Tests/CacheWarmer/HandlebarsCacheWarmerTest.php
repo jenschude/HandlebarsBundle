@@ -28,7 +28,6 @@ class HandlebarsCacheWarmerTest extends \PHPUnit_Framework_TestCase
 
         $container = $this->prophesize('Symfony\Component\DependencyInjection\ContainerInterface');
         $container->get('handlebars')->willReturn($handlebars->reveal());
-        $container->has('logger')->willReturn(false);
         $finder = $this->prophesize('Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface');
 
         $template1 = $this->prophesize('Symfony\Component\Templating\TemplateReferenceInterface');
@@ -53,8 +52,6 @@ class HandlebarsCacheWarmerTest extends \PHPUnit_Framework_TestCase
         $logger->warning('Failed to compile Handlebars template "template1": "test"')->shouldBeCalled();
         $container = $this->prophesize('Symfony\Component\DependencyInjection\ContainerInterface');
         $container->get('handlebars')->willReturn($handlebars->reveal());
-        $container->has('logger')->willReturn(true);
-        $container->get('logger')->willReturn($logger->reveal());
 
         $finder = $this->prophesize('Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface');
 
@@ -62,7 +59,7 @@ class HandlebarsCacheWarmerTest extends \PHPUnit_Framework_TestCase
         $template1->get('engine')->willReturn('hbs');
         $template1->__toString()->willReturn('template1');
         $finder->findAllTemplates()->willReturn([$template1->reveal()]);
-        $warmer = new HandlebarsCacheWarmer($container->reveal(), $finder->reveal());
+        $warmer = new HandlebarsCacheWarmer($container->reveal(), $finder->reveal(), $logger->reveal());
 
         $warmer->warmUp('');
     }
