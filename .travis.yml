@@ -10,7 +10,6 @@ cache:
 
 before_script:
 - PHP=$TRAVIS_PHP_VERSION
-- composer self-update
 - composer global require hirak/prestissimo
 - if [ $PHP == '5.5' ] ; then composer update -o --ignore-platform-reqs --prefer-lowest --prefer-dist; fi
 - if [ $PHP != '5.5' ] ; then composer install -o --ignore-platform-reqs --prefer-dist; fi

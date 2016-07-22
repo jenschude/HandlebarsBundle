@@ -108,32 +108,52 @@ class HandlebarsDataCollector extends DataCollector implements LateDataCollector
         );
 
         $templates = array();
+        /**
+         * @var \Twig_Profiler_Profile $p
+         */
         foreach ($profile as $p) {
             $d = $this->computeData($p);
 
-            $data['template_count'] += ($p->isTemplate() ? 1 : 0) + $d['template_count'];
-            $data['block_count'] += ($p->isBlock() ? 1 : 0) + $d['block_count'];
-            $data['macro_count'] += ($p->isMacro() ? 1 : 0) + $d['macro_count'];
+            $data['template_count'] += $this->sumProfileCount($p->isTemplate(), $d['template_count']);
+            $data['block_count'] += $this->sumProfileCount($p->isBlock(), $d['block_count']);
+            $data['macro_count'] += $this->sumProfileCount($p->isMacro(), $d['macro_count']);
 
-            if ($p->isTemplate()) {
-                if (!isset($templates[$p->getTemplate()])) {
-                    $templates[$p->getTemplate()] = 1;
-                } else {
-                    ++$templates[$p->getTemplate()];
-                }
-            }
-
-            foreach ($d['templates'] as $template => $count) {
-                if (!isset($templates[$template])) {
-                    $templates[$template] = $count;
-                } else {
-                    $templates[$template] += $count;
-                }
-            }
+            $templates = $this->incTemplateCount($p, $templates);
+            $templates = $this->sumTemplates($d['templates'], $templates);
         }
         $data['templates'] = $templates;
 
         return $data;
+    }
+
+    protected function incTemplateCount(\Twig_Profiler_Profile $p, $templates)
+    {
+        if ($p->isTemplate()) {
+            if (!isset($templates[$p->getTemplate()])) {
+                $templates[$p->getTemplate()] = 1;
+            } else {
+                ++$templates[$p->getTemplate()];
+            }
+        }
+        return $templates;
+    }
+
+    protected function sumProfileCount($pIs, $count)
+    {
+        return ($pIs ? 1 : 0) + $count;
+    }
+
+    protected function sumTemplates(array $d, array $templates)
+    {
+        foreach ($d as $template => $count) {
+            if (!isset($templates[$template])) {
+                $templates[$template] = $count;
+            } else {
+                $templates[$template] += $count;
+            }
+        }
+
+        return $templates;
     }
 
     /**

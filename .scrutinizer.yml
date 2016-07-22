@@ -10,8 +10,6 @@ tools:
         config: { level: psr2 }
 before_commands:
     - composer config -g github-oauth.github.com $GITHUB_OAUTH_TOKEN
-    - composer global require hirak/prestissimo
-    - composer install --prefer-dist -o
 build:
     environment:
         php: '7.0'
