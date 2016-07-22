@@ -38,7 +38,8 @@ class Filesystem
     }
 
     /**
-     * {@inheritdoc}
+     * @param $key
+     * @return mixed
      */
     public function load($key)
     {
@@ -46,7 +47,9 @@ class Filesystem
     }
 
     /**
-     * {@inheritdoc}
+     * @param $key
+     * @param $content
+     * @param $resources
      */
     public function write($key, $content, $resources)
     {
@@ -54,17 +57,5 @@ class Filesystem
         $cache->write($content, $resources);
 
         return;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTimestamp($key)
-    {
-        if (!file_exists($key)) {
-            return 0;
-        }
-
-        return (int) @filemtime($key);
     }
 }

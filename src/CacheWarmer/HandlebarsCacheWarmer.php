@@ -7,6 +7,7 @@
 namespace JaySDe\HandlebarsBundle\CacheWarmer;
 
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
@@ -49,8 +50,14 @@ class HandlebarsCacheWarmer implements CacheWarmerInterface
                 $engine->compile($template);
             } catch (\Exception $e) {
                 // problem during compilation, log it and give up
-                if ($logger) {
-                    $logger->warn(sprintf('Failed to compile Handlebars template "%s": "%s"', (string) $template, $e->getMessage()));
+                if ($logger instanceof LoggerInterface) {
+                    $logger->warning(
+                        sprintf(
+                            'Failed to compile Handlebars template "%s": "%s"',
+                            (string) $template,
+                            $e->getMessage()
+                        )
+                    );
                 }
             }
         }
