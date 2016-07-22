@@ -123,7 +123,7 @@ class HandlebarsDataCollectorTest extends \PHPUnit_Framework_TestCase
         $template1 = new \Twig_Profiler_Profile('template1', \Twig_Profiler_Profile::TEMPLATE, 'template1');
         $profile->addProfile($template1);
         $profile->enter();
-        usleep(10);
+        usleep(10000);
         $profile->leave();
         $collector = new HandlebarsDataCollector($profile);
 
