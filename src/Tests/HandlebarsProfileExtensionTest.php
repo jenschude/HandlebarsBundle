@@ -22,7 +22,6 @@ class HandlebarsProfileExtensionTest extends \PHPUnit_Framework_TestCase
         $watchEvent->stop()->shouldBeCalled();
         $watch = $this->prophesize('Symfony\Component\Stopwatch\Stopwatch');
         $watch->start('test', 'template')->willReturn($watchEvent->reveal())->shouldBeCalled();
-        $watch->stop()->shouldBeCalled();
 
         $profiler = new HandlebarsProfileExtension($mainProfile->reveal(), $watch->reveal());
 
