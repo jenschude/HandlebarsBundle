@@ -123,11 +123,12 @@ class HandlebarsDataCollectorTest extends \PHPUnit_Framework_TestCase
         $template1 = new \Twig_Profiler_Profile('template1', \Twig_Profiler_Profile::TEMPLATE, 'template1');
         $profile->addProfile($template1);
         $profile->enter();
-        sleep(1);
+        $template1->enter();
+        usleep(10000);
+        $template1->leave();
         $profile->leave();
         $collector = new HandlebarsDataCollector($profile);
-
-        $this->assertGreaterThanOrEqual(1000, $collector->getTime());
+        $this->assertGreaterThanOrEqual(10, $collector->getTime());
     }
 
     public function testGetName()
@@ -144,7 +145,9 @@ class HandlebarsDataCollectorTest extends \PHPUnit_Framework_TestCase
         $template1 = new \Twig_Profiler_Profile('template1', \Twig_Profiler_Profile::TEMPLATE, 'template1');
         $profile->addProfile($template1);
         $profile->enter();
-        sleep(1);
+        $template1->enter();
+        usleep(10000);
+        $template1->leave();
         $profile->leave();
         $collector = new HandlebarsDataCollector($profile);
 
