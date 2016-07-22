@@ -6,8 +6,6 @@
 
 namespace JaySDe\HandlebarsBundle\CacheWarmer;
 
-
-use JaySDe\HandlebarsBundle\HandlebarsEnvironment;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,7 +28,7 @@ class HandlebarsCacheWarmer implements CacheWarmerInterface
         ContainerInterface $container,
         TemplateFinderInterface $finder,
         LoggerInterface $logger = null
-    ){
+    ) {
         // We don't inject the HandlebarsEngine directly as it depends on the
         // template locator (via the loader) which might be a cached one.
         // The cached template locator is available once the TemplatePathsCacheWarmer

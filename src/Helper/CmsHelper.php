@@ -22,11 +22,11 @@ class CmsHelper implements HelperInterface
         $options = isset($options['hash']) ? $options['hash'] : [];
         $bundle = '';
         if (isset($options['bundle'])) {
-            $bundle = $options['bundle'] . ':';
+            $bundle = $options['bundle'].':';
             unset($options['bundle']);
         }
 
-        $cmsKey = $bundle . $context;
+        $cmsKey = $bundle.$context;
 
         $result = $this->translationHelper->handle($cmsKey, $options);
 

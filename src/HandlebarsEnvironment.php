@@ -71,18 +71,18 @@ class HandlebarsEnvironment
             'auto_reload' => null,
             'debug' => true,
             'helpers' => $helper->getHelperMethods(),
-            'partialresolver' => function ($cx, $name) use ($loader, &$partials) {
+            'partialresolver' => function($cx, $name) use ($loader, &$partials) {
                 $extension = false;
-                if ($loader->exists($name . '.handlebars')) {
+                if ($loader->exists($name.'.handlebars')) {
                     $extension = '.handlebars';
-                } else if ($loader->exists($name . '.hbs')) {
+                } else if ($loader->exists($name.'.hbs')) {
                     $extension = '.hbs';
                 }
                 if ($extension === false) {
                     return null;
                 }
-                $partials[] = new FileResource($loader->getCacheKey($name . $extension));
-                return $loader->getSource($name . $extension);
+                $partials[] = new FileResource($loader->getCacheKey($name.$extension));
+                return $loader->getSource($name.$extension);
             },
         ], $options);
         $this->debug = (bool) $this->options['debug'];
@@ -103,7 +103,7 @@ class HandlebarsEnvironment
         } catch (\Exception $e) {
             throw new LoaderException($e->getMessage());
         }
-        $this->cache->write($cacheKey, '<?php // ' . $name . PHP_EOL . $phpStr, $this->partials->getArrayCopy());
+        $this->cache->write($cacheKey, '<?php // '.$name.PHP_EOL.$phpStr, $this->partials->getArrayCopy());
 
         return $phpStr;
     }
@@ -138,7 +138,7 @@ class HandlebarsEnvironment
      */
     public function loadTemplate($templateName)
     {
-        $name = (string)$templateName;
+        $name = (string) $templateName;
         $cacheKey = $this->getCacheFilename($name);
         if (!$this->isAutoReload() && file_exists($cacheKey)) {
             return $this->cache->load($cacheKey);

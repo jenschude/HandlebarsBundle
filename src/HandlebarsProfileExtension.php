@@ -41,7 +41,6 @@ class HandlebarsProfileExtension
         if (1 === count($this->actives)) {
             $this->actives[0]->leave();
         }
-
         if ($this->stopwatch && $profile->isTemplate()) {
             $this->events[$profile]->stop();
             unset($this->events[$profile]);

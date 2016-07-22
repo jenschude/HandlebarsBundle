@@ -16,7 +16,7 @@ class HandlebarsHelper
     {
         if ($helper instanceof HelperInterface) {
             $this->helpers[$id] = [$helper, 'handle'];
-        } elseif(is_callable($helper)) {
+        } elseif (is_callable($helper)) {
             $this->helpers[$id] = $helper;
         }
     }
