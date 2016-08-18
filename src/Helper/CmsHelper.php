@@ -20,9 +20,13 @@ class CmsHelper implements HelperInterface
     public function handle($context, $options)
     {
         $options = isset($options['hash']) ? $options['hash'] : [];
-        $bundle = isset($options['bundle']) ? $options['bundle'] . ':' : '';
+        $bundle = '';
+        if (isset($options['bundle'])) {
+            $bundle = $options['bundle'].':';
+            unset($options['bundle']);
+        }
 
-        $cmsKey = $bundle . $context;
+        $cmsKey = $bundle.$context;
 
         $result = $this->translationHelper->handle($cmsKey, $options);
 

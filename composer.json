@@ -3,7 +3,7 @@
   "type": "symfony-bundle",
   "license": "MIT",
   "homepage": "https://github.com/jayS-de/HandlebarsBundle",
-  "description": "This Symfony3 bundle provides integration for the handlebars template engine.",
+  "description": "This Symfony bundle provides integration for the handlebars template engine.",
   "keywords": ["templating", "handlebars", "symfony"],
   "authors": [
     {
@@ -21,8 +21,10 @@
   "require": {
     "php": ">=5.5",
     "symfony/framework-bundle": "^2.8 || ^3.0",
-    "zordius/lightncandy": "^0.93",
-    "twig/twig": "*"
+    "symfony/finder": "^2.4 || ^3.0",
+    "symfony/templating": "^2.4 || ^3.0",
+    "zordius/lightncandy": "^0.94",
+    "twig/twig": ">=1.18"
   },
   "require-dev": {
     "symfony/yaml": "^2.8 || ^3.0",

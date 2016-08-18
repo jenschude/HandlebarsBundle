@@ -1,0 +1,18 @@
+language: php
+php:
+  - "5.5"
+  - "5.6"
+  - "7.0"
+  - "hhvm"
+cache:
+  directories:
+  - vendor
+
+before_script:
+- PHP=$TRAVIS_PHP_VERSION
+- composer global require hirak/prestissimo
+- if [ $PHP == '5.5' ] ; then composer update -o --ignore-platform-reqs --prefer-lowest --prefer-dist; fi
+- if [ $PHP != '5.5' ] ; then composer install -o --ignore-platform-reqs --prefer-dist; fi
+
+script:
+- vendor/bin/phpunit

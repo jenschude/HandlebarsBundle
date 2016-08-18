@@ -8,13 +8,19 @@
         <parameter key="handlebars.loader.filesystem.class">JaySDe\HandlebarsBundle\Loader\FilesystemLoader</parameter>
         <parameter key="templating.engine.handlebars.class">JaySDe\HandlebarsBundle\HandlebarsEngine</parameter>
         <parameter key="handlebars.cache_warmer.class">JaySDe\HandlebarsBundle\CacheWarmer\HandlebarsCacheWarmer</parameter>
+        <parameter key="handlebars.helper_service.class">JaySDe\HandlebarsBundle\HandlebarsHelper</parameter>
     </parameters>
     <services>
         <service id="handlebars" class="%handlebars.class%">
             <argument type="service" id="handlebars.loader" />
             <argument type="service" id="handlebars.helper" />
             <argument />
+            <argument type="service" id="handlebars.cache" />
             <argument type="service" id="handlebars.extension.profiler" />
+        </service>
+        <service id="handlebars.cache" class="JaySDe\HandlebarsBundle\Cache\Filesystem">
+            <argument />
+            <argument />
         </service>
         <service id="handlebars.template.paths" class="JaySDe\HandlebarsBundle\Loader\FilesystemLoader">
             <factory service="handlebars.loader.filesystem" method="getPaths" />
@@ -32,14 +38,14 @@
             <tag name="kernel.cache_warmer" />
             <argument type="service" id="service_container" />
             <argument type="service" id="handlebars.template.finder" />
+            <argument type="service" id="logger" />
         </service>
         <service id="templating.engine.handlebars" class="%templating.engine.handlebars.class%" public="false">
             <argument type="service" id="handlebars"/>
             <argument type="service" id="templating.name_parser"/>
             <tag name="templating.engine" />
         </service>
-        <service id="handlebars.helper" class="JaySDe\HandlebarsBundle\HandlebarsHelper">
-        </service>
+        <service id="handlebars.helper" class="%handlebars.helper_service.class%" />
         <service id="handlebars.helper.json" class="JaySDe\HandlebarsBundle\Helper\JsonHelper">
             <tag name="handlebars.helper" id="json" />
         </service>
@@ -50,6 +56,9 @@
         <service id="handlebars.helper.trans" class="JaySDe\HandlebarsBundle\Helper\TranslationHelper">
             <tag name="handlebars.helper" id="i18n" />
             <argument type="service" id="translator" />
+            <argument>%handlebars.translation.default_namespace%</argument>
+            <argument>%handlebars.translation.interpolation_prefix%</argument>
+            <argument>%handlebars.translation.interpolation_suffix%</argument>
         </service>
         <service id="handlebars.helper.esi" class="JaySDe\HandlebarsBundle\Helper\EsiHelper">
             <tag name="handlebars.helper" id="esi" />

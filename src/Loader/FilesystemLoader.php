@@ -24,9 +24,9 @@ class FilesystemLoader
     protected $errorCache = [];
 
     /**
-     * Constructor.
-     *
-     * @param string|array $paths A path or an array of paths where to look for templates
+     * FilesystemLoader constructor.
+     * @param FileLocatorInterface $locator
+     * @param TemplateNameParserInterface $parser
      */
     public function __construct(FileLocatorInterface $locator, TemplateNameParserInterface $parser)
     {
@@ -186,23 +186,9 @@ class FilesystemLoader
             return $this->cache[$name];
         }
 
-        if (isset($this->errorCache[$name])) {
-            if (!$throw) {
-                return false;
-            }
-
-            throw new LoaderException($this->errorCache[$name]);
-        }
-
         list($namespace, $shortname) = $this->parseName($name);
-        if (!isset($this->paths[$namespace])) {
-            $this->errorCache[$name] = sprintf('There are no registered paths for namespace "%s".', $namespace);
-
-            if (!$throw) {
-                return false;
-            }
-
-            throw new LoaderException($this->errorCache[$name]);
+        if (!$this->validateTemplate($name, $namespace, $throw)) {
+            return false;
         }
 
         foreach ($this->paths[$namespace] as $path) {
@@ -215,6 +201,34 @@ class FilesystemLoader
             }
         }
 
+        return $this->locateTemplate($template, $name, $namespace, $throw);
+    }
+
+    private function validateTemplate($name, $namespace, $throw = true)
+    {
+        if (isset($this->errorCache[$name])) {
+            if (!$throw) {
+                return false;
+            }
+
+            throw new LoaderException($this->errorCache[$name]);
+        }
+
+        if (!isset($this->paths[$namespace])) {
+            $this->errorCache[$name] = sprintf('There are no registered paths for namespace "%s".', $namespace);
+
+            if (!$throw) {
+                return false;
+            }
+
+            throw new LoaderException($this->errorCache[$name]);
+        }
+
+        return true;
+    }
+
+    private function locateTemplate($template, $name, $namespace, $throw = true)
+    {
         try {
             $template = $this->parser->parse($template);
             $realpath = $this->locator->locate($template);
@@ -222,6 +236,7 @@ class FilesystemLoader
                 return $this->cache[$name] = $realpath;
             }
         } catch (\Exception $e) {
+            // catch locator not found exceptions
         }
 
         $this->errorCache[$name] = sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace]));

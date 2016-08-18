@@ -10,28 +10,25 @@ use JaySDe\HandlebarsBundle\Helper\HelperInterface;
 
 class HandlebarsHelper
 {
-    private $helperMethods = [];
     private $helpers = [];
 
     public function addHelper($id, $helper)
     {
-        // This is a temporary measure until we decide on a common interface.
-        // I'm relaxing the argument type above, but doing the check here to
-        // determine the helper's invocation method
-
         if ($helper instanceof HelperInterface) {
-            $method = 'handle';
-        } else {
-            $method = 'execute';
+            $this->helpers[$id] = [$helper, 'handle'];
+        } elseif (method_exists($helper, 'execute')) {
+            // This is a temporary measure until we decide on a common interface.
+            // I'm relaxing the argument type above, but doing the check here to
+            // determine the helper's invocation method
+            $this->helpers[$id] = [$helper, 'execute'];
+        } elseif (is_callable($helper)) {
+            $this->helpers[$id] = $helper;
         }
-
-        $this->helperMethods[$id] = get_class($helper) . '::' . $method;
-        $this->helpers[$id] = [$helper, $method];
     }
 
     public function getHelperMethods()
     {
-        return $this->helperMethods;
+        return array_keys($this->helpers);
     }
 
     public function getHelpers()

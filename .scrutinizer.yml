@@ -1,0 +1,25 @@
+tools:
+    php_sim: true
+    php_pdepend: true
+    php_analyzer: true
+    php_code_sniffer: true
+    php_changetracking: true
+    php_mess_detector: true
+    sensiolabs_security_checker: true
+    php_cs_fixer:
+        config: { level: psr2 }
+before_commands:
+    - composer config -g github-oauth.github.com $GITHUB_OAUTH_TOKEN
+build:
+    environment:
+        php: '7.0'
+    tests:
+        override:
+            -
+                command: vendor/bin/phpunit --coverage-clover=coverage0
+                coverage:
+                    file: 'coverage0'
+                    format: 'php-clover'
+
+filter:
+    excluded_paths: [src/Tests/*]

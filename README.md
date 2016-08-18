@@ -40,7 +40,7 @@ public function registerBundles()
 
 ### 3. Enable the Handlebars template engine in the config
 
-``` yml
+``` yaml
     # app/config/config.yml
     framework:
         templating:      { engines: ['twig', 'handlebars'] }
@@ -63,19 +63,62 @@ public function indexAction(Request $request)
 
 This will render the file index.hbs in your `Resources/views` folder.
 
+### Configuration flags
+
+It's possible to set or unset the different flags provided by LightnCandy. Therefore set in your config.yml the fields flags and excludedFlags. The bundle will ensure that default flags are set, to prevent a non working template engine. The complete list of flags can be found at the [LnC documentation](https://github.com/zordius/lightncandy#compile-options)
+
+```yaml
+ # app/config/config.yml
+handlebars:
+  flags:
+    - FLAG_BESTPERFORMANCE
+  excludedFlags:
+    - FLAG_STANDALONE
+```
+
 ### Helper functions
 
 To add new helper functions to the handlebars engine, you just have to create a class implementing ```JaySDe\HandlebarsBundle\Helper\HelperInterface``` and create a service definition with the tag ```handlebars.helper```. The ID of the tag is the helpers block name inside handlebars templates.
 
-*Note: adherence to the ```HelperInterface``` has been relaxed for the backport so both JaySDe-style and SDC-style helpers can be added.*
-
 Example:
 
 ```xml
-        <service id="handlebars.helper.trans" class="JaySDe\HandlebarsBundle\Helper\TranslationHelper">
-            <tag name="handlebars.helper" id="i18n" />
-            <argument type="service" id="translator" />
-        </service>
+<service id="handlebars.helper.trans" class="JaySDe\HandlebarsBundle\Helper\TranslationHelper">
+	<tag name="handlebars.helper" id="i18n" />
+	<argument type="service" id="translator" />
+</service>
+```
+
+The helper registry also supports to register any callable. So it's possible to create a class with the magic __invoke() method and define a service for it
+
+```php
+class MyHelper{
+    public function __invoke($context, $options) {}
+}
+```
+
+```xml
+<service id="handlebars.helper.my" class="MyHelper">
+	<tag name="handlebars.helper" id="my" />
+</service>
+```
+
+or using a factory method returning an anonymous function for example
+
+```php
+class HelperFactory{
+    public function getMyHelper() {
+        return function($context, $options) {}
+    }
+}
+```
+
+```xml
+<service id="handlebar.helper_factory" class="HelperFactory" />
+<service id="handlebars.helper.trans" class="callable">
+	<factory service="handlebar.helper_factory" method="getMyHelper">
+	<tag name="handlebars.helper.my" id="my" />
+</service>
 ```
 
 Authors

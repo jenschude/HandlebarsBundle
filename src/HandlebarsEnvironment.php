@@ -15,72 +15,95 @@ use Symfony\Component\Config\Resource\FileResource;
 
 class HandlebarsEnvironment
 {
+    /**
+     * @var array
+     */
     protected $options;
-    protected $originalCache;
 
     /**
      * @var Filesystem
      */
     protected $cache;
+
     /**
      * @var FilesystemLoader
      */
     protected $loader;
 
-    protected $extensions = [];
+    /**
+     * @var bool
+     */
     protected $autoReload;
+
+    /**
+     * @var bool
+     */
     protected $debug;
+
+    /**
+     * @var HandlebarsProfileExtension
+     */
     private $profiler;
 
+    /**
+     * @var HandlebarsHelper
+     */
     private $helper;
 
-    public function __construct(FilesystemLoader $loader, HandlebarsHelper $helper, $options = [], HandlebarsProfileExtension $profiler)
+    /**
+     * @var \ArrayObject
+     */
+    private $partials;
+
+    public function __construct(
+        FilesystemLoader $loader,
+        HandlebarsHelper $helper,
+        $options = [],
+        Filesystem $cache,
+        HandlebarsProfileExtension $profiler
+    )
     {
         $this->loader = $loader;
         $this->partials = $partials = new \ArrayObject();
         $this->helper = $helper;
+
         $this->options = array_merge([
             'auto_reload' => null,
             'debug' => true,
-            'flags' => LightnCandy::FLAG_BESTPERFORMANCE |
-                LightnCandy::FLAG_HANDLEBARSJS |
-                LightnCandy::FLAG_RUNTIMEPARTIAL |
-                LightnCandy::FLAG_EXTHELPER |
-                LightnCandy::FLAG_ERROR_EXCEPTION,
             'helpers' => $helper->getHelperMethods(),
-            'partialresolver' => function ($cx, $name) use ($loader, &$partials) {
+            'partialresolver' => function($cx, $name) use ($loader, &$partials) {
                 $extension = false;
-                if ($loader->exists($name . '.handlebars')) {
+                if ($loader->exists($name.'.handlebars')) {
                     $extension = '.handlebars';
-                } else if ($loader->exists($name . '.hbs')) {
+                } else if ($loader->exists($name.'.hbs')) {
                     $extension = '.hbs';
                 }
                 if ($extension === false) {
                     return null;
                 }
-                $partials[] = new FileResource($loader->getCacheKey($name . $extension));
-                return $loader->getSource($name . $extension);
+                $partials[] = new FileResource($loader->getCacheKey($name.$extension));
+                return $loader->getSource($name.$extension);
             },
         ], $options);
         $this->debug = (bool) $this->options['debug'];
         $this->autoReload = null === $this->options['auto_reload'] ? $this->debug : (bool) $this->options['auto_reload'];
-        $this->setCache($this->options['cache']);
+        $this->cache = $cache;
         $this->profiler = $profiler;
     }
 
     public function compile($name)
     {
-        $source = $this->loader->getSource($name);
+        $source = $this->getLoader()->getSource($name);
         $cacheKey = $this->getCacheFilename($name);
 
         $phpStr = '';
         try {
-            $this->partials->exchangeArray([new FileResource($this->loader->getCacheKey($name))]);
+            $this->partials->exchangeArray([new FileResource($this->getLoader()->getCacheKey($name))]);
             $phpStr = LightnCandy::compile($source, $this->options);
         } catch (\Exception $e) {
             throw new LoaderException($e->getMessage());
         }
-        $this->cache->write($cacheKey, '<?php // ' . $name . PHP_EOL . $phpStr, $this->partials->getArrayCopy());
+        $this->cache->write($cacheKey, '<?php // '.$name.PHP_EOL.$phpStr, $this->partials->getArrayCopy());
 
         return $phpStr;
     }
@@ -95,21 +118,6 @@ class HandlebarsEnvironment
         $this->profiler->leave($templateProfile);
 
         return $html;
-    }
-
-    /**
-     * Sets the current cache implementation.
-     *
-     * @param string|false $cache an absolute path to the compiled templates directory
-     */
-    public function setCache($cache)
-    {
-        if (is_string($cache)) {
-            $this->originalCache = $cache;
-            $this->cache = new Filesystem($cache, $this->debug);
-        } else {
-            throw new \LogicException(sprintf('Cache can only be a string.'));
-        }
     }
 
     public function getCacheFilename($name)
@@ -130,9 +138,8 @@ class HandlebarsEnvironment
      */
     public function loadTemplate($templateName)
     {
-        $name = (string)$templateName;
+        $name = (string) $templateName;
         $cacheKey = $this->getCacheFilename($name);
-
         if (!$this->isAutoReload() && file_exists($cacheKey)) {
             return $this->cache->load($cacheKey);
         } else if ($this->isAutoReload() && $this->cache->isFresh($cacheKey)) {
