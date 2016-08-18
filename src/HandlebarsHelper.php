@@ -19,7 +19,7 @@ class HandlebarsHelper
         // I'm relaxing the argument type above, but doing the check here to
         // determine the helper's invocation method
 
-        if (is_a($helper, 'JaySDe\HandlebarsBundle\Helper\HelperInterface')) {
+        if ($helper instanceof HelperInterface) {
             $method = 'handle';
         } else {
             $method = 'execute';
