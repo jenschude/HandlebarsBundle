@@ -77,6 +77,9 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'cache' => '%kernel.cache_dir%/handlebars',
             'debug' => '%kernel.debug%',
             'auto_reload' => '%kernel.debug%',
+            'cms' => [
+                'default_namespace' => null
+            ],
             'translation' => [
                 'default_namespace' => null,
                 'interpolation_prefix' => '%',
