@@ -32,6 +32,9 @@ class HandlebarsExtension extends Extension
         foreach ($config['translation'] as $key => $value) {
             $container->setParameter('handlebars.translation.'.$key, $value);
         }
+        foreach ($config['cms'] as $key => $value) {
+            $container->setParameter('handlebars.cms.'.$key, $value);
+        }
 
         $this->setupAssetic($loader, $config, $container);
         $this->configurePath($config, $container);
