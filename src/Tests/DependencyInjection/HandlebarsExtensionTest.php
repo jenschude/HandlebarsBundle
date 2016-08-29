@@ -40,6 +40,7 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Alias')
         )->shouldBeCalled();
+        $container->setParameter("handlebars.cms.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_prefix", '%')->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_suffix", '%')->shouldBeCalled();
@@ -93,6 +94,7 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Alias')
         )->shouldBeCalled();
+        $container->setParameter("handlebars.cms.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_prefix", '%')->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_suffix", '%')->shouldBeCalled();
@@ -146,6 +148,7 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Alias')
         )->shouldBeCalled();
+        $container->setParameter("handlebars.cms.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_prefix", '%')->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_suffix", '%')->shouldBeCalled();
@@ -201,6 +204,7 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Alias')
         )->shouldBeCalled();
+        $container->setParameter("handlebars.cms.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_prefix", '%')->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_suffix", '%')->shouldBeCalled();
@@ -253,6 +257,7 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Alias')
         )->shouldBeCalled();
+        $container->setParameter("handlebars.cms.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_prefix", '%')->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_suffix", '%')->shouldBeCalled();
@@ -317,6 +322,7 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Alias')
         )->shouldBeCalled();
+        $container->setParameter("handlebars.cms.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.default_namespace", null)->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_prefix", '%')->shouldBeCalled();
         $container->setParameter("handlebars.translation.interpolation_suffix", '%')->shouldBeCalled();
