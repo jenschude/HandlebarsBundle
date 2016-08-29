@@ -8,7 +8,7 @@
         <parameter key="handlebars.loader.filesystem.class">JaySDe\HandlebarsBundle\Loader\FilesystemLoader</parameter>
         <parameter key="templating.engine.handlebars.class">JaySDe\HandlebarsBundle\HandlebarsEngine</parameter>
         <parameter key="handlebars.cache_warmer.class">JaySDe\HandlebarsBundle\CacheWarmer\HandlebarsCacheWarmer</parameter>
-        <parameter key="handlebars.helper_service.class">JaySDe\HandlebarsBundle\HandlebarsHelper</parameter>
+        <parameter key="handlebars.helper_service.class">\JaySDe\HandlebarsBundle\HandlebarsHelperService</parameter>
     </parameters>
     <services>
         <service id="handlebars" class="%handlebars.class%">

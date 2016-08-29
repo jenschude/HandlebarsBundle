@@ -46,7 +46,7 @@ class HandlebarsEnvironment
     private $profiler;
 
     /**
-     * @var HandlebarsHelper
+     * @var HandlebarsHelperServiceInterface
      */
     private $helper;
 
@@ -57,7 +57,7 @@ class HandlebarsEnvironment
 
     public function __construct(
         FilesystemLoader $loader,
-        HandlebarsHelper $helper,
+        HandlebarsHelperServiceInterface $helper,
         $options = [],
         Filesystem $cache,
         HandlebarsProfileExtension $profiler
@@ -70,7 +70,7 @@ class HandlebarsEnvironment
         $this->options = array_merge([
             'auto_reload' => null,
             'debug' => true,
-            'helpers' => $helper->getHelperMethods(),
+            'helpers' => $this->helper->getHelperMethods(),
             'partialresolver' => function($cx, $name) use ($loader, &$partials) {
                 $extension = false;
                 if ($loader->exists($name.'.handlebars')) {

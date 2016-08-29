@@ -9,6 +9,7 @@ namespace JaySDe\HandlebarsBundle\Tests;
 
 use JaySDe\HandlebarsBundle\Cache\Filesystem;
 use JaySDe\HandlebarsBundle\HandlebarsEnvironment;
+use JaySDe\HandlebarsBundle\HandlebarsHelperService;
 use Prophecy\Argument;
 use Symfony\Component\Config\Resource\FileResource;
 
@@ -38,7 +39,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $loader->getCacheKey('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
         $loader->getSource('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
 
-        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
 
@@ -78,7 +79,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $loader->getCacheKey('partial.hbs')->willReturn(__DIR__ . '/Fixtures/Resources/views/partial.hbs');
         $loader->getSource('partial.hbs')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/views/partial.hbs'));
 
-        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
 
@@ -116,7 +117,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $loader->getCacheKey('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
         $loader->getSource('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
 
-        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
 
@@ -151,7 +152,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $loader->getCacheKey('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
         $loader->getSource('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
 
-        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
 
@@ -181,7 +182,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $loader->getCacheKey('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
         $loader->getSource('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
 
-        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
 
@@ -219,7 +220,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testGetCacheFileNameFail($value, $expectedResult)
     {
         $loader = $this->prophesize('JaySDe\HandlebarsBundle\Loader\FilesystemLoader');
-        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
         $cache = $this->prophesize('JaySDe\HandlebarsBundle\Cache\Filesystem');
         $cache->generateKey('test')->willReturn($value)->shouldBeCalled();
@@ -240,7 +241,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $loader = $this->prophesize('JaySDe\HandlebarsBundle\Loader\FilesystemLoader');
-        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
         $profiler->enter(Argument::type('Twig_Profiler_Profile'))->shouldBeCalled();
@@ -274,7 +275,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $loader->getCacheKey('partial.hbs')->willReturn(__DIR__ . '/Fixtures/Resources/views/partial.hbs');
         $loader->getSource('partial.hbs')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/views/partial.hbs'));
 
-        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
         $profiler->enter(Argument::type('Twig_Profiler_Profile'))->shouldBeCalled();
@@ -305,7 +306,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $loader->getSource('main')->willReturn('{{>test }}');
         $loader->exists('test.handlebars')->willThrow(new \Exception());
 
-        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelper');
+        $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');
 

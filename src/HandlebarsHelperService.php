@@ -8,10 +8,13 @@ namespace JaySDe\HandlebarsBundle;
 
 use JaySDe\HandlebarsBundle\Helper\HelperInterface;
 
-class HandlebarsHelper
+class HandlebarsHelperService implements HandlebarsHelperServiceInterface
 {
     private $helpers = [];
 
+    /**
+     * @inheritdoc
+     */
     public function addHelper($id, $helper)
     {
         if ($helper instanceof HelperInterface) {
@@ -21,11 +24,17 @@ class HandlebarsHelper
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getHelperMethods()
     {
         return array_keys($this->helpers);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getHelpers()
     {
         return $this->helpers;

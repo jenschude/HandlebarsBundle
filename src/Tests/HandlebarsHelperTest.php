@@ -7,21 +7,21 @@
 namespace JaySDe\HandlebarsBundle\Tests;
 
 
-use JaySDe\HandlebarsBundle\HandlebarsHelper;
+use JaySDe\HandlebarsBundle\HandlebarsHelperService;
 use JaySDe\HandlebarsBundle\Tests\Fixtures\InvokeHelper;
 
 class HandlebarsHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddHelper()
     {
-        $helperService = new HandlebarsHelper();
+        $helperService = new HandlebarsHelperService();
         $observer = $this->prophesize('\JaySDe\HandlebarsBundle\Helper\HelperInterface');
         $helperService->addHelper('test', $observer);
     }
 
     public function testGetHelperMethods()
     {
-        $helperService = new HandlebarsHelper();
+        $helperService = new HandlebarsHelperService();
         $observer = $this->prophesize('\JaySDe\HandlebarsBundle\Helper\HelperInterface');
         $helperService->addHelper('test', $observer->reveal());
 
@@ -30,7 +30,7 @@ class HandlebarsHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHelpers()
     {
-        $helperService = new HandlebarsHelper();
+        $helperService = new HandlebarsHelperService();
         $observer = $this->prophesize('\JaySDe\HandlebarsBundle\Helper\HelperInterface');
         $helper = $observer->reveal();
         $helperService->addHelper('test', $helper);
@@ -43,7 +43,7 @@ class HandlebarsHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testCallable()
     {
-        $helperService = new HandlebarsHelper();
+        $helperService = new HandlebarsHelperService();
         $t = function () {};
         $helperService->addHelper('test', $t);
 
@@ -54,7 +54,7 @@ class HandlebarsHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testInvoke()
     {
-        $helperService = new HandlebarsHelper();
+        $helperService = new HandlebarsHelperService();
         $t = new InvokeHelper();
         $helperService->addHelper('test', $t);
 
