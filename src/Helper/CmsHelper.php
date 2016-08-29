@@ -19,7 +19,7 @@ class CmsHelper implements HelperInterface
         $defaultNamespace = null
     ) {
         $this->translationHelper = $translationHelper;
-        $this->defaultNamespace = $defaultNamespace;
+        $this->defaultNamespace = !is_null($defaultNamespace) ? $defaultNamespace . ':' : '';
     }
 
     public function handle($context, $options)

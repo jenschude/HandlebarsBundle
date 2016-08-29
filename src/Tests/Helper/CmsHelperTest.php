@@ -50,4 +50,14 @@ class CmsHelperTest extends \PHPUnit_Framework_TestCase
         $test = $helper->handle('test', ['hash' => ['foo' => 'bar', 'bundle' => 'foo']]);
         $this->assertSame('lorem ipsum', $test);
     }
+
+    public function testDefaultNamespace()
+    {
+        $observer = $this->prophesize('\JaySDe\HandlebarsBundle\Helper\TranslationHelper');
+        $observer->handle('cms:test', [])->willReturn('lorem ipsum')->shouldBeCalled();
+        $helper = new CmsHelper($observer->reveal(), 'cms');
+
+        $test = $helper->handle('test', []);
+        $this->assertSame('lorem ipsum', $test);
+    }
 }
