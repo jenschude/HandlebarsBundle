@@ -98,6 +98,10 @@ class HandlebarsExtension extends Extension
             $dir = $container->getParameter('kernel.root_dir').'/Resources/'.$bundle.'/views';
             if (is_dir($dir)) {
                 $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($dir));
+                $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array(
+                    $dir,
+                    $this->normalizeBundleNameForLoaderNamespace($bundle)
+                ));
             }
             $container->addResource(new FileExistenceResource($dir));
 
@@ -105,9 +109,22 @@ class HandlebarsExtension extends Extension
             $dir = dirname($reflection->getFileName()).'/Resources/views';
             if (is_dir($dir)) {
                 $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($dir));
+                $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array(
+                    $dir,
+                    $this->normalizeBundleNameForLoaderNamespace($bundle)
+                ));
             }
             $container->addResource(new FileExistenceResource($dir));
         }
+    }
+
+    private function normalizeBundleNameForLoaderNamespace($bundle)
+    {
+        if ('Bundle' === substr($bundle, -6)) {
+            $bundle = substr($bundle, 0, -6);
+        }
+
+        return $bundle;
     }
 
     private function addConfigPath($config, ContainerBuilder $container)

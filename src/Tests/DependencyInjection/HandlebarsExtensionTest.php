@@ -123,7 +123,7 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->load([['assetic' => true]], $container->reveal());
     }
 
-    public function testBundlePathes()
+    public function testBundlePaths()
     {
         $bundleDir = realpath(__DIR__ . '/../..');
         $kernelDir = $bundleDir . '/Tests/Fixtures';
@@ -135,6 +135,8 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $loaderDefinition->addMethodCall("addPath", [$resourceDir])->shouldBeCalled();
         $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/Resources/TestBundle/views'])->shouldBeCalled();
         $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/TestBundle/Resources/views'])->shouldBeCalled();
+        $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/Resources/TestBundle/views', 'Test'])->shouldBeCalled();
+        $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/TestBundle/Resources/views', 'Test'])->shouldBeCalled();
 
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
