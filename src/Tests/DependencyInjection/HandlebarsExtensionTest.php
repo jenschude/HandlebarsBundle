@@ -10,8 +10,14 @@ namespace JaySDe\HandlebarsBundle\Tests\DependencyInjection;
 use JaySDe\HandlebarsBundle\DependencyInjection\HandlebarsExtension;
 use LightnCandy\LightnCandy;
 use Prophecy\Argument;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileExistenceResource;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -133,8 +139,6 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $container = $this->prophesize('Symfony\Component\DependencyInjection\ContainerBuilder');
         $loaderDefinition = $this->prophesize('Symfony\Component\DependencyInjection\Definition');
         $loaderDefinition->addMethodCall("addPath", [$resourceDir])->shouldBeCalled();
-        $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/Resources/TestBundle/views'])->shouldBeCalled();
-        $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/TestBundle/Resources/views'])->shouldBeCalled();
         $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/Resources/TestBundle/views', 'Test'])->shouldBeCalled();
         $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/TestBundle/Resources/views', 'Test'])->shouldBeCalled();
 
@@ -359,5 +363,52 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
             ]],
             $container->reveal()
         );
+    }
+
+    public function testHandlebarsLoaderPaths()
+    {
+        $bundleDir = realpath(__DIR__ . '/../..');
+        $kernelDir = $bundleDir . '/Tests/Fixtures';
+
+        $container = $this->createContainer();
+        $container->registerExtension(new HandlebarsExtension());
+        $container->getExtension('handlebars')->load([],$container);
+        $this->compileContainer($container);
+        $def = $container->getDefinition('handlebars.loader.filesystem');
+        $paths = [];
+        foreach ($def->getMethodCalls() as $call) {
+            if ('addPath' === $call[0] && false === strpos($call[1][0], 'Form')) {
+                $paths[] = $call[1];
+            }
+        }
+        $this->assertEquals([
+            [$kernelDir.'/Resources/views'],
+            [$kernelDir.'/Resources/TestBundle/views', 'Test'],
+            [$kernelDir.'/TestBundle/Resources/views', 'Test'],
+        ], $paths);
+    }
+
+    private function createContainer()
+    {
+        $bundleDir = realpath(__DIR__ . '/../..');
+        $kernelDir = $bundleDir . '/Tests/Fixtures';
+
+        $container = new ContainerBuilder(new ParameterBag([
+            'kernel.cache_dir' => $kernelDir,
+            'kernel.root_dir' => $kernelDir,
+            'kernel.charset' => 'UTF-8',
+            'kernel.debug' => false,
+            'kernel.bundles' => [
+                'TestBundle' => 'JaySDe\\HandlebarsBundle\\Tests\\Fixtures\\TestBundle\\TestBundle'
+            ],
+        ]));
+        return $container;
+    }
+
+    private function compileContainer(ContainerBuilder $container)
+    {
+        $container->getCompilerPassConfig()->setOptimizationPasses([]);
+        $container->getCompilerPassConfig()->setRemovingPasses([]);
+        $container->compile();
     }
 }

@@ -7,7 +7,10 @@
 namespace JaySDe\HandlebarsBundle\Tests;
 
 
+use JaySDe\HandlebarsBundle\DependencyInjection\HandlebarsExtension;
 use JaySDe\HandlebarsBundle\HandlebarsEngine;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class HandlebarsEngineTest extends \PHPUnit_Framework_TestCase
 {

@@ -97,7 +97,6 @@ class HandlebarsExtension extends Extension
         foreach ($container->getParameter('kernel.bundles') as $bundle => $class) {
             $dir = $container->getParameter('kernel.root_dir').'/Resources/'.$bundle.'/views';
             if (is_dir($dir)) {
-                $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($dir));
                 $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array(
                     $dir,
                     $this->normalizeBundleNameForLoaderNamespace($bundle)
@@ -108,7 +107,6 @@ class HandlebarsExtension extends Extension
             $reflection = new \ReflectionClass($class);
             $dir = dirname($reflection->getFileName()).'/Resources/views';
             if (is_dir($dir)) {
-                $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array($dir));
                 $handlebarsFilesystemLoaderDefinition->addMethodCall('addPath', array(
                     $dir,
                     $this->normalizeBundleNameForLoaderNamespace($bundle)
