@@ -17,7 +17,7 @@ Installation
 ### Installation
 
 ```bash
-composer require jays-de/handlebars-bundle dev-master
+composer require jays-de/handlebars-bundle
 
 Composer will install the bundle to your project's `vendor/` directory.
 
