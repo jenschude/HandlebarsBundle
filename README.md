@@ -78,6 +78,41 @@ handlebars:
 
 ### Helper functions
 
+#### Built-In helpers
+
+The Bundle comes with some built-in helpers.
+
+##### Linking to pages
+
+Use the path helper and refer to the route
+
+```
+<a href="{{path '_welcome' }}">Home</a>
+```
+
+Its also possible to add parameters to the referenced route
+
+```
+<a href="{{path 'article_show' slug=article.slug}}">{{ article.title }}</a>
+```
+
+You can also generate an absolute URL using the url helper
+
+```
+<a href="{{url '_welcome' }}">Home</a>
+```
+
+##### Linking to assets
+
+To avoid hardcoding pathes to assets like images, javascript or stylesheets use the asset helper.
+
+```
+<img src="{{asset 'images/logo.png' }}" />
+
+<link href="{{asset 'css/blog.css' }}" rel="stylesheet" />
+```
+
+#### Adding new Helpers
 To add new helper functions to the handlebars engine, you just have to create a class implementing ```JaySDe\HandlebarsBundle\Helper\HelperInterface``` and create a service definition with the tag ```handlebars.helper```. The ID of the tag is the helpers block name inside handlebars templates.
 
 Example:
@@ -114,11 +149,13 @@ class HelperFactory{
 ```
 
 ```xml
-<service id="handlebar.helper_factory" class="HelperFactory" />
-<service id="handlebars.helper.trans" class="callable">
-	<factory service="handlebar.helper_factory" method="getMyHelper">
-	<tag name="handlebars.helper.my" id="my" />
-</service>
+<services>
+    <service id="handlebar.helper_factory" class="HelperFactory" />
+    <service id="handlebars.helper.trans" class="callable">
+        <factory service="handlebar.helper_factory" method="getMyHelper" />
+        <tag name="handlebars.helper.my" id="my" />
+    </service>
+</services>
 ```
 
 Authors
