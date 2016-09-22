@@ -187,7 +187,13 @@ class FilesystemLoader
         }
 
         list($namespace, $shortname) = $this->parseName($name);
-        if (!$this->validateTemplate($name, $namespace, $throw)) {
+
+        try {
+            $this->validateTemplate($name, $namespace);
+        } catch (LoaderException $e) {
+            if ($throw) {
+                throw $e;
+            }
             return false;
         }
 
@@ -201,25 +207,24 @@ class FilesystemLoader
             }
         }
 
-        return $this->locateTemplate($template, $name, $namespace, $throw);
+        try {
+            return $this->locateTemplate($template, $name, $namespace);
+        } catch (LoaderException $e) {
+            if ($throw) {
+                throw $e;
+            }
+            return false;
+        }
     }
 
-    private function validateTemplate($name, $namespace, $throw = true)
+    private function validateTemplate($name, $namespace)
     {
         if (isset($this->errorCache[$name])) {
-            if (!$throw) {
-                return false;
-            }
-
             throw new LoaderException($this->errorCache[$name]);
         }
 
         if (!isset($this->paths[$namespace])) {
             $this->errorCache[$name] = sprintf('There are no registered paths for namespace "%s".', $namespace);
-
-            if (!$throw) {
-                return false;
-            }
 
             throw new LoaderException($this->errorCache[$name]);
         }
@@ -227,7 +232,7 @@ class FilesystemLoader
         return true;
     }
 
-    private function locateTemplate($template, $name, $namespace, $throw = true)
+    private function locateTemplate($template, $name, $namespace)
     {
         try {
             $template = $this->parser->parse($template);
@@ -240,10 +245,6 @@ class FilesystemLoader
         }
 
         $this->errorCache[$name] = sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace]));
-
-        if (!$throw) {
-            return false;
-        }
 
         throw new LoaderException($this->errorCache[$name]);
     }

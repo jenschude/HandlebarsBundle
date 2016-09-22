@@ -75,7 +75,7 @@ class HandlebarsExtension extends Extension
 
     private function setFlag($flags, $flag, $op) {
         if ($op == 'set') {
-            return $flags | constant('LightnCandy\LightnCandy::' . $flag);
+            return $flags | constant('LightnCandy\LightnCandy::'.$flag);
         }
         return $flags & ~constant('LightnCandy\LightnCandy::'.$flag);
     }
