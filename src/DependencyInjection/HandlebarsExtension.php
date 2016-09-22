@@ -48,14 +48,10 @@ class HandlebarsExtension extends Extension
     private function getFlags($config) {
         $flags = 0;
         if (isset($config['flags'])) {
-            foreach ($config['flags'] as $flag) {
-                $flags = $flags | constant('LightnCandy\LightnCandy::'.$flag);
-            }
+            $flags = $this->setFlags($flags, $config['flags'], 'set');
         }
         if (isset($config['excludeFlags'])) {
-            foreach ($config['excludeFlags'] as $flag) {
-                $flags = $flags & ~constant('LightnCandy\LightnCandy::'.$flag);
-            }
+            $flags = $this->setFlags($flags, $config['excludeFlags'], 'unset');
             unset($config['excludeFlags']);
         }
         // ensure base functionality with flag standalone disabled
@@ -67,6 +63,21 @@ class HandlebarsExtension extends Extension
                 LightnCandy::FLAG_ERROR_EXCEPTION) & ~LightnCandy::FLAG_STANDALONEPHP;
 
         return $flags;
+    }
+
+    private function setFlags($flags, array $configFlags, $op) {
+        foreach ($configFlags as $flag) {
+            $flags = $this->setFlag($flags, $flag, $op);
+        }
+
+        return $flags;
+    }
+
+    private function setFlag($flags, $flag, $op) {
+        if ($op == 'set') {
+            return $flags | constant('LightnCandy\LightnCandy::' . $flag);
+        }
+        return $flags & ~constant('LightnCandy\LightnCandy::'.$flag);
     }
 
     private function setupAssetic(LoaderInterface $loader, $config, ContainerBuilder $container)
