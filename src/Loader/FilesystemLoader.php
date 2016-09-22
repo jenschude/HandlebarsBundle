@@ -188,12 +188,8 @@ class FilesystemLoader
 
         list($namespace, $shortname) = $this->parseName($name);
 
-        try {
-            $this->validateTemplate($name, $namespace);
-        } catch (LoaderException $e) {
-            if ($throw) {
-                throw $e;
-            }
+        if (!$this->validateTemplate($name, $namespace)) {
+            if ($throw) { throw new LoaderException($this->errorCache[$name]); }
             return false;
         }
 
@@ -207,26 +203,23 @@ class FilesystemLoader
             }
         }
 
-        try {
-            return $this->locateTemplate($template, $name, $namespace);
-        } catch (LoaderException $e) {
-            if ($throw) {
-                throw $e;
-            }
+        if (!$template = $this->locateTemplate($template, $name, $namespace)) {
+            if ($throw) { throw new LoaderException($this->errorCache[$name]); }
             return false;
         }
+        return $template;
     }
 
     private function validateTemplate($name, $namespace)
     {
         if (isset($this->errorCache[$name])) {
-            throw new LoaderException($this->errorCache[$name]);
+            return false;
         }
 
         if (!isset($this->paths[$namespace])) {
             $this->errorCache[$name] = sprintf('There are no registered paths for namespace "%s".', $namespace);
 
-            throw new LoaderException($this->errorCache[$name]);
+            return false;
         }
 
         return true;
@@ -245,7 +238,6 @@ class FilesystemLoader
         }
 
         $this->errorCache[$name] = sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace]));
-
-        throw new LoaderException($this->errorCache[$name]);
+        return false;
     }
 }
