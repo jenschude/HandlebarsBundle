@@ -26,7 +26,7 @@ class TemplateFinderTest extends \PHPUnit_Framework_TestCase
             $names[] = $template->getLogicalName();
         }
         sort($names);
-        $this->assertSame(['layout.html.hbs', 'main.hbs', 'partial.hbs'], $names);
+        $this->assertSame(['layout.html.hbs', 'main.hbs', 'partial.handlebars'], $names);
     }
 
     public function testRunOnce()

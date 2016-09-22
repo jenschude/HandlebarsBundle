@@ -76,12 +76,12 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $loader->getSource('main')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/views/main.hbs'));
         $loader->exists('@Test/exclamation.handlebars')->willReturn(false);
         $loader->exists('@Test/exclamation.hbs')->willReturn(true);
-        $loader->exists('partial.hbs')->willReturn(true);
-        $loader->exists('partial.handlebars')->willReturn(false);
+        $loader->exists('partial.hbs')->willReturn(false);
+        $loader->exists('partial.handlebars')->willReturn(true);
         $loader->getCacheKey('@Test/exclamation.hbs')->willReturn(__DIR__ . '/Fixtures/Resources/TestBundle/views/exclamation.hbs');
-        $loader->getCacheKey('partial.hbs')->willReturn(__DIR__ . '/Fixtures/Resources/views/partial.hbs');
+        $loader->getCacheKey('partial.handlebars')->willReturn(__DIR__ . '/Fixtures/Resources/views/partial.handlebars');
         $loader->getSource('@Test/exclamation.hbs')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/TestBundle/views/exclamation.hbs'));
-        $loader->getSource('partial.hbs')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/views/partial.hbs'));
+        $loader->getSource('partial.handlebars')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/views/partial.handlebars'));
 
         $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
@@ -96,7 +96,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
             Argument::type('string'),
             Argument::allOf(
                 Argument::containing(new FileResource(__DIR__ . '/Fixtures/Resources/views/main.hbs')),
-                Argument::containing(new FileResource(__DIR__ . '/Fixtures/Resources/views/partial.hbs'))
+                Argument::containing(new FileResource(__DIR__ . '/Fixtures/Resources/views/partial.handlebars'))
             )
         )->shouldBeCalled();
         $cache->load('main')->shouldBeCalled();
@@ -165,6 +165,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $cache->generateKey('test')->willReturn('test');
         $cache->isFresh('test')->willReturn(true);
         $cache->load('test')->shouldBeCalled();
+        $cache->write('test', Argument::any(), Argument::containing(Argument::type('Symfony\Component\Config\Resource\FileResource')))->shouldBeCalled();
 
         $environment = new HandlebarsEnvironment(
             $loader->reveal(),
@@ -255,6 +256,7 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $cache->generateKey('test')->willReturn('test');
         $cache->isFresh('test')->willReturn(true);
         $cache->load('test')->willReturn(function() { return 'hello world';});
+        $cache->write('test', Argument::any(), Argument::containing(Argument::type('Symfony\Component\Config\Resource\FileResource')))->shouldBeCalled();
 
         $environment = new HandlebarsEnvironment(
             $loader->reveal(),
@@ -276,12 +278,12 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
         $loader->getSource('main')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/views/main.hbs'));
         $loader->exists('@Test/exclamation.handlebars')->willReturn(false);
         $loader->exists('@Test/exclamation.hbs')->willReturn(true);
-        $loader->exists('partial.hbs')->willReturn(true);
-        $loader->exists('partial.handlebars')->willReturn(false);
+        $loader->exists('partial.hbs')->willReturn(false);
+        $loader->exists('partial.handlebars')->willReturn(true);
         $loader->getCacheKey('@Test/exclamation.hbs')->willReturn(__DIR__ . '/Fixtures/Resources/TestBundle/views/exclamation.hbs');
-        $loader->getCacheKey('partial.hbs')->willReturn(__DIR__ . '/Fixtures/Resources/views/partial.hbs');
+        $loader->getCacheKey('partial.handlebars')->willReturn(__DIR__ . '/Fixtures/Resources/views/partial.handlebars');
         $loader->getSource('@Test/exclamation.hbs')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/TestBundle/views/exclamation.hbs'));
-        $loader->getSource('partial.hbs')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/views/partial.hbs'));
+        $loader->getSource('partial.handlebars')->willReturn(file_get_contents(__DIR__ . '/Fixtures/Resources/views/partial.handlebars'));
 
         $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 

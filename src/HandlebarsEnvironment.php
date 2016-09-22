@@ -72,12 +72,7 @@ class HandlebarsEnvironment
             'debug' => true,
             'helpers' => $this->helper->getHelperMethods(),
             'partialresolver' => function($cx, $name) use ($loader, &$partials) {
-                $extension = false;
-                if ($loader->exists($name.'.handlebars')) {
-                    $extension = '.handlebars';
-                } else if ($loader->exists($name.'.hbs')) {
-                    $extension = '.hbs';
-                }
+                $extension = $this->getTemplateExtension($loader, $name);
                 if ($extension === false) {
                     return null;
                 }
@@ -89,6 +84,16 @@ class HandlebarsEnvironment
         $this->autoReload = null === $this->options['auto_reload'] ? $this->debug : (bool) $this->options['auto_reload'];
         $this->cache = $cache;
         $this->profiler = $profiler;
+    }
+
+    private function getTemplateExtension(FilesystemLoader $loader, $name) {
+        if ($loader->exists($name.'.handlebars')) {
+            return '.handlebars';
+        }
+        if ($loader->exists($name.'.hbs')) {
+            return '.hbs';
+        }
+        return false;
     }
 
     public function compile($name)
@@ -140,12 +145,10 @@ class HandlebarsEnvironment
     {
         $name = (string) $templateName;
         $cacheKey = $this->getCacheFilename($name);
-        if (!$this->isAutoReload() && file_exists($cacheKey)) {
-            return $this->cache->load($cacheKey);
-        } else if ($this->isAutoReload() && $this->cache->isFresh($cacheKey)) {
-            return $this->cache->load($cacheKey);
+
+        if (!file_exists($cacheKey) || $this->isAutoReload() && !$this->cache->isFresh($cacheKey)) {
+            $this->compile($name);
         }
-        $this->compile($name);
 
         return $this->cache->load($cacheKey);
     }
