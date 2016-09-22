@@ -180,26 +180,30 @@ class FilesystemLoader
 
     protected function findTemplate($template, $throw = true)
     {
-        $name = $this->normalizeName($template);
+        $normalizedName = $this->normalizeName($template);
 
-        if (isset($this->cache[$name])) {
-            return $this->cache[$name];
+        if (isset($this->cache[$normalizedName])) {
+            return $this->cache[$normalizedName];
         }
 
-        list($namespace, $shortname) = $this->parseName($name);
+        list($namespace, $shortName) = $this->parseName($normalizedName);
 
-        if (!$this->validateTemplate($name, $namespace)) {
-            if ($throw) { throw new LoaderException($this->errorCache[$name]); }
+        if (!$this->validateTemplate($normalizedName, $namespace)) {
+            if ($throw) { throw new LoaderException($this->errorCache[$normalizedName]); }
             return false;
         }
 
+        return $this->searchTemplate($template, $normalizedName, $shortName, $namespace, $throw);
+    }
+
+    private function searchTemplate($template, $name, $shortName, $namespace, $throw) {
         foreach ($this->paths[$namespace] as $path) {
-            if (is_file($path.'/'.$shortname)) {
-                if (false !== $realpath = realpath($path.'/'.$shortname)) {
+            if (is_file($path.'/'.$shortName)) {
+                if (false !== $realpath = realpath($path.'/'.$shortName)) {
                     return $this->cache[$name] = $realpath;
                 }
 
-                return $this->cache[$name] = $path.'/'.$shortname;
+                return $this->cache[$name] = $path.'/'.$shortName;
             }
         }
 
@@ -237,7 +241,11 @@ class FilesystemLoader
             // catch locator not found exceptions
         }
 
-        $this->errorCache[$name] = sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace]));
+        $this->errorCache[$name] = sprintf(
+            'Unable to find template "%s" (looked into: %s).',
+            $name,
+            implode(', ', $this->paths[$namespace])
+        );
         return false;
     }
 }
