@@ -52,6 +52,20 @@
             <argument type="service" id="handlebars.helper.trans" />
             <argument>%handlebars.cms.default_namespace%</argument>
         </service>
+        <service id="handlebars.helper.asset" class="JaySDe\HandlebarsBundle\Helper\AssetHelper" public="false">
+            <tag name="handlebars.helper" id="asset" />
+            <argument type="service" id="assets.packages" />
+        </service>
+        <service id="handlebars.helper.path" class="JaySDe\HandlebarsBundle\Helper\RoutingHelper" public="false">
+            <tag name="handlebars.helper" id="path" />
+            <argument type="service" id="router" />
+            <argument>path</argument>
+        </service>
+        <service id="handlebars.helper.url" class="JaySDe\HandlebarsBundle\Helper\RoutingHelper" public="false">
+            <tag name="handlebars.helper" id="url" />
+            <argument type="service" id="router" />
+            <argument>url</argument>
+        </service>
         <service id="handlebars.helper.trans" class="JaySDe\HandlebarsBundle\Helper\TranslationHelper">
             <argument type="service" id="translator" />
             <argument>%handlebars.translation.default_namespace%</argument>
