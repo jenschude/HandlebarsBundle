@@ -87,19 +87,19 @@ The Bundle comes with some built-in helpers.
 Use the path helper and refer to the route
 
 ```
-<a href="{{path '_welcome' }}">Home</a>
+<a href="{{route_path '_welcome' }}">Home</a>
 ```
 
 Its also possible to add parameters to the referenced route
 
 ```
-<a href="{{path 'article_show' slug=article.slug}}">{{ article.title }}</a>
+<a href="{{route_path 'article_show' slug=article.slug}}">{{ article.title }}</a>
 ```
 
 You can also generate an absolute URL using the url helper
 
 ```
-<a href="{{url '_welcome' }}">Home</a>
+<a href="{{route_url '_welcome' }}">Home</a>
 ```
 
 ##### Linking to assets
@@ -151,9 +151,9 @@ class HelperFactory{
 ```xml
 <services>
     <service id="handlebar.helper_factory" class="HelperFactory" />
-    <service id="handlebars.helper.trans" class="callable">
+    <service id="handlebars.helper.my" class="callable">
         <factory service="handlebar.helper_factory" method="getMyHelper" />
-        <tag name="handlebars.helper.my" id="my" />
+        <tag name="handlebars.helper" id="my" />
     </service>
 </services>
 ```
