@@ -21,8 +21,9 @@ class RoutingHelper implements HelperInterface
     public function handle($context, $options)
     {
         $options = isset($options['hash']) ? $options['hash'] : [];
+        $relative = isset($options['relative']) ? $options['relative'] : false;
         $method = 'get' . ucfirst($this->type);
-        return $this->$method($context, $options);
+        return $this->$method($context, $options, $relative);
     }
 
     private function getPath($name, $parameters = array(), $relative = false)
