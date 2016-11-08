@@ -6,14 +6,9 @@
 
 namespace JaySDe\HandlebarsBundle;
 
-
-use JaySDe\HandlebarsBundle\Cache\Filesystem;
-use LightnCandy\LightnCandy;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\TemplateNameParserInterface;
-use Symfony\Component\Templating\TemplateReferenceInterface;
 
 class HandlebarsEngine implements EngineInterface
 {
