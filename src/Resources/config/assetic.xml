@@ -29,8 +29,6 @@
         <service id="assetic.handlebars_formula_loader.real" class="%assetic.handlebars_formula_loader.class%" public="false">
             <tag name="assetic.templating.handlebars" />
             <tag name="monolog.logger" channel="assetic" />
-            <argument type="service" id="handlebars" />
-            <argument type="service" id="logger" on-invalid="ignore" />
         </service>
     </services>
 </container>

@@ -8,58 +8,58 @@ namespace JaySDe\HandlebarsBundle\Tests\CacheWarmer;
 
 
 use JaySDe\HandlebarsBundle\CacheWarmer\HandlebarsCacheWarmer;
+use JaySDe\HandlebarsBundle\HandlebarsEngine;
+use JaySDe\HandlebarsBundle\HandlebarsEnvironment;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
+use Symfony\Component\Templating\TemplateReferenceInterface;
 
 class HandlebarsCacheWarmerTest extends \PHPUnit_Framework_TestCase
 {
     public function testOptional()
     {
-        $container = $this->prophesize('Symfony\Component\DependencyInjection\ContainerInterface');
-        $finder = $this->prophesize('Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface');
-        $warmer = new HandlebarsCacheWarmer($container->reveal(), $finder->reveal());
+        $engine = $this->prophesize(HandlebarsEnvironment::class);
+        $finder = $this->prophesize(TemplateFinderInterface::class);
+        $warmer = new HandlebarsCacheWarmer($engine->reveal(), $finder->reveal());
         $this->assertTrue($warmer->isOptional());
     }
 
     public function testWarmup()
     {
-        $handlebars = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsEnvironment');
-        $handlebars->compile(Argument::type('Symfony\Component\Templating\TemplateReferenceInterface'))->shouldBeCalled();
+        $handlebars = $this->prophesize(HandlebarsEnvironment::class);
+        $handlebars->compile(Argument::type(TemplateReferenceInterface::class))->shouldBeCalled();
 
-        $container = $this->prophesize('Symfony\Component\DependencyInjection\ContainerInterface');
-        $container->get('handlebars')->willReturn($handlebars->reveal());
-        $finder = $this->prophesize('Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface');
+        $finder = $this->prophesize(TemplateFinderInterface::class);
 
-        $template1 = $this->prophesize('Symfony\Component\Templating\TemplateReferenceInterface');
+        $template1 = $this->prophesize(TemplateReferenceInterface::class);
         $template1->get('engine')->willReturn('hbs');
 
-        $template2 = $this->prophesize('Symfony\Component\Templating\TemplateReferenceInterface');
+        $template2 = $this->prophesize(TemplateReferenceInterface::class);
         $template2->get('engine')->willReturn('twig');
 
         $finder->findAllTemplates()->willReturn([$template1->reveal(), $template2->reveal()]);
-        $warmer = new HandlebarsCacheWarmer($container->reveal(), $finder->reveal());
+        $warmer = new HandlebarsCacheWarmer($handlebars->reveal(), $finder->reveal());
         
         $warmer->warmUp('');
     }
 
     public function testCompileException()
     {
-        $handlebars = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsEnvironment');
-        $handlebars->compile(Argument::type('Symfony\Component\Templating\TemplateReferenceInterface'))
+        $handlebars = $this->prophesize(HandlebarsEnvironment::class);
+        $handlebars->compile(Argument::type(TemplateReferenceInterface::class))
             ->willThrow(new \Exception("test"));
 
-        $logger = $this->prophesize('Psr\Log\LoggerInterface');
+        $logger = $this->prophesize(LoggerInterface::class);
         $logger->warning('Failed to compile Handlebars template "template1": "test"')->shouldBeCalled();
-        $container = $this->prophesize('Symfony\Component\DependencyInjection\ContainerInterface');
-        $container->get('handlebars')->willReturn($handlebars->reveal());
 
-        $finder = $this->prophesize('Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface');
+        $finder = $this->prophesize(TemplateFinderInterface::class);
 
-        $template1 = $this->prophesize('Symfony\Component\Templating\TemplateReferenceInterface');
+        $template1 = $this->prophesize(TemplateReferenceInterface::class);
         $template1->get('engine')->willReturn('hbs');
         $template1->__toString()->willReturn('template1');
         $finder->findAllTemplates()->willReturn([$template1->reveal()]);
-        $warmer = new HandlebarsCacheWarmer($container->reveal(), $finder->reveal(), $logger->reveal());
+        $warmer = new HandlebarsCacheWarmer($handlebars->reveal(), $finder->reveal(), $logger->reveal());
 
         $warmer->warmUp('');
     }

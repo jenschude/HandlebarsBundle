@@ -36,7 +36,7 @@
         </service>
         <service id="handlebars.cache_warmer" class="%handlebars.cache_warmer.class%" public="false">
             <tag name="kernel.cache_warmer" />
-            <argument type="service" id="service_container" />
+            <argument type="service" id="handlebars" />
             <argument type="service" id="handlebars.template.finder" />
             <argument type="service" id="logger" />
         </service>

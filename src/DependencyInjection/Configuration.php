@@ -56,7 +56,8 @@ class Configuration implements ConfigurationInterface
             'FLAG_HANDLEBARSJS_FULL',
         );
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('handlebars')
+        $rootNode = $treeBuilder->root('handlebars');
+        $rootNode
             ->fixXmlConfig('path')
             ->children()
                 ->booleanNode('assetic')->end()

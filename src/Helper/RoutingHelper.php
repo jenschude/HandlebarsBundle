@@ -15,15 +15,21 @@ class RoutingHelper implements HelperInterface
     public function __construct(UrlGeneratorInterface $generator, $type)
     {
         $this->generator = $generator;
-        $this->type = $type;
+        $this->type = strtolower($type);
     }
     
     public function handle($context, $options)
     {
         $options = isset($options['hash']) ? $options['hash'] : [];
         $relative = isset($options['relative']) ? $options['relative'] : false;
-        $method = 'get' . ucfirst($this->type);
-        return $this->$method($context, $options, $relative);
+        switch ($this->type) {
+            case 'path':
+                return $this->getPath($context, $options, $relative);
+            case 'url':
+                return $this->getUrl($context, $options, $relative);
+            default:
+                throw new \InvalidArgumentException();
+        }
     }
 
     private function getPath($name, $parameters = array(), $relative = false)

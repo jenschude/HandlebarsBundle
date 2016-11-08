@@ -6,26 +6,27 @@
 
 namespace JaySDe\HandlebarsBundle\CacheWarmer;
 
+use JaySDe\HandlebarsBundle\HandlebarsEngine;
+use JaySDe\HandlebarsBundle\HandlebarsEnvironment;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class HandlebarsCacheWarmer implements CacheWarmerInterface
 {
-    private $container;
+    private $environment;
     private $finder;
     private $logger;
 
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container The dependency injection container
+     * @param HandlebarsEngine $environment The handlebars engine
      * @param TemplateFinderInterface $finder The template paths cache warmer
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ContainerInterface $container,
+        HandlebarsEnvironment $environment,
         TemplateFinderInterface $finder,
         LoggerInterface $logger = null
     ) {
@@ -33,7 +34,7 @@ class HandlebarsCacheWarmer implements CacheWarmerInterface
         // template locator (via the loader) which might be a cached one.
         // The cached template locator is available once the TemplatePathsCacheWarmer
         // has been warmed up
-        $this->container = $container;
+        $this->environment = $environment;
         $this->finder = $finder;
         $this->logger = $logger;
     }
@@ -44,13 +45,13 @@ class HandlebarsCacheWarmer implements CacheWarmerInterface
      */
     public function warmUp($cacheDir)
     {
-        $engine = $this->container->get('handlebars');
+        $environment = $this->environment;
         foreach ($this->finder->findAllTemplates() as $template) {
             if (!in_array($template->get('engine'), ['hbs', 'handlebars'])) {
                 continue;
             }
             try {
-                $engine->compile($template);
+                $environment->compile($template);
             } catch (\Exception $e) {
                 // problem during compilation, log it and give up
                 if ($this->logger instanceof LoggerInterface) {
