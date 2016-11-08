@@ -3,7 +3,7 @@ HandlebarsBundle
 
 This [Symfony](http://symfony.com/) bundle provides integration for the [Handlebars](http://handlebarsjs.com/) template engine using [LightnCandy](https://packagist.org/packages/zordius/lightncandy) as renderer.
 
-[![Build Status](https://img.shields.io/travis/jayS-de/HandlebarsBundle/master.svg?style=flat-square)](https://travis-ci.org/jayS-de/HandlebarsBundle) [![Scrutinizer](https://img.shields.io/scrutinizer/g/jayS-de/HandlebarsBundle.svg?style=flat-square)](https://scrutinizer-ci.com/g/jayS-de/HandlebarsBundle/) [![Scrutinizer](https://img.shields.io/scrutinizer/coverage/g/jayS-de/HandlebarsBundle.svg?style=flat-square)](https://scrutinizer-ci.com/g/jayS-de/HandlebarsBundle/) [![Packagist](https://img.shields.io/packagist/v/jays-de/handlebars-bundle.svg?style=flat-square)](https://packagist.org/packages/jays-de/handlebars-bundle)
+[![Build Status](https://img.shields.io/travis/jayS-de/HandlebarsBundle/master.svg?style=flat-square)](https://travis-ci.org/jayS-de/HandlebarsBundle) [![Scrutinizer](https://img.shields.io/scrutinizer/g/jayS-de/HandlebarsBundle.svg?style=flat-square)](https://scrutinizer-ci.com/g/jayS-de/HandlebarsBundle/) [![Scrutinizer](https://img.shields.io/scrutinizer/coverage/g/jayS-de/HandlebarsBundle.svg?style=flat-square)](https://scrutinizer-ci.com/g/jayS-de/HandlebarsBundle/) [![Packagist](https://img.shields.io/packagist/v/jays-de/handlebars-bundle.svg?style=flat-square)](https://packagist.org/packages/jays-de/handlebars-bundle) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/e0c910db-d32d-4136-9a55-fbe6153c576f/mini.png)](https://insight.sensiolabs.com/projects/e0c910db-d32d-4136-9a55-fbe6153c576f)
 
 Installation
 ------------
