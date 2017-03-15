@@ -57,7 +57,6 @@ class HandlebarsExtension extends Extension
         $flags = ($flags | LightnCandy::FLAG_BESTPERFORMANCE |
                 LightnCandy::FLAG_HANDLEBARSJS |
                 LightnCandy::FLAG_RUNTIMEPARTIAL |
-                LightnCandy::FLAG_HANDLEBARSLAMBDA |
                 LightnCandy::FLAG_EXTHELPER |
                 LightnCandy::FLAG_ERROR_EXCEPTION) & ~LightnCandy::FLAG_STANDALONEPHP;
 
