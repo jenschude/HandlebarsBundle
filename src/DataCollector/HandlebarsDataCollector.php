@@ -29,6 +29,11 @@ class HandlebarsDataCollector extends DataCollector implements LateDataCollector
     {
     }
 
+    public function reset()
+    {
+        $this->data = [];
+    }
+
     /**
      * {@inheritdoc}
      */
