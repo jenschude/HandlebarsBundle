@@ -10,10 +10,13 @@ namespace JaySDe\HandlebarsBundle\Tests;
 use JaySDe\HandlebarsBundle\Cache\Filesystem;
 use JaySDe\HandlebarsBundle\HandlebarsEnvironment;
 use JaySDe\HandlebarsBundle\HandlebarsHelperService;
+use JaySDe\HandlebarsBundle\Loader\FilesystemLoader;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator;
 use Symfony\Component\Config\Resource\FileResource;
 
-class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
+class HandlebarsEnvironmentTest extends TestCase
 {
     protected function setUp()
     {
@@ -246,6 +249,8 @@ class HandlebarsEnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $loader = $this->prophesize('JaySDe\HandlebarsBundle\Loader\FilesystemLoader');
+        $loader->getCacheKey('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
+        $loader->getSource('test')->willReturn(__DIR__ . '/Fixtures/Resources/views/main.hbs');
         $helper = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsHelperService');
 
         $profiler = $this->prophesize('JaySDe\HandlebarsBundle\HandlebarsProfileExtension');

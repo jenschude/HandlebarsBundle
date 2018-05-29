@@ -8,8 +8,9 @@ namespace JaySDe\HandlebarsBundle\Tests\Helper;
 
 
 use JaySDe\HandlebarsBundle\Helper\AssetHelper;
+use PHPUnit\Framework\TestCase;
 
-class AssetHelperTest extends \PHPUnit_Framework_TestCase
+class AssetHelperTest extends TestCase
 {
     public function testAsset()
     {

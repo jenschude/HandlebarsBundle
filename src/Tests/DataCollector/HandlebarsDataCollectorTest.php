@@ -8,8 +8,9 @@ namespace JaySDe\HandlebarsBundle\Tests\DataCollector;
 
 
 use JaySDe\HandlebarsBundle\DataCollector\HandlebarsDataCollector;
+use PHPUnit\Framework\TestCase;
 
-class HandlebarsDataCollectorTest extends \PHPUnit_Framework_TestCase
+class HandlebarsDataCollectorTest extends TestCase
 {
     public function testTemplateCount()
     {

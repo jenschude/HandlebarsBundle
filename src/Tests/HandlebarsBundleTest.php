@@ -9,8 +9,9 @@ namespace JaySDe\HandlebarsBundle\Tests;
 
 use JaySDe\HandlebarsBundle\DependencyInjection\Compiler\HelperPass;
 use JaySDe\HandlebarsBundle\HandlebarsBundle;
+use PHPUnit\Framework\TestCase;
 
-class HandlebarsBundleTest extends \PHPUnit_Framework_TestCase
+class HandlebarsBundleTest extends TestCase
 {
     public function testBuild()
     {

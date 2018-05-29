@@ -10,12 +10,13 @@ namespace JaySDe\HandlebarsBundle\Tests\CacheWarmer;
 use JaySDe\HandlebarsBundle\CacheWarmer\HandlebarsCacheWarmer;
 use JaySDe\HandlebarsBundle\HandlebarsEngine;
 use JaySDe\HandlebarsBundle\HandlebarsEnvironment;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinderInterface;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
-class HandlebarsCacheWarmerTest extends \PHPUnit_Framework_TestCase
+class HandlebarsCacheWarmerTest extends TestCase
 {
     public function testOptional()
     {
@@ -40,7 +41,7 @@ class HandlebarsCacheWarmerTest extends \PHPUnit_Framework_TestCase
 
         $finder->findAllTemplates()->willReturn([$template1->reveal(), $template2->reveal()]);
         $warmer = new HandlebarsCacheWarmer($handlebars->reveal(), $finder->reveal());
-        
+
         $warmer->warmUp('');
     }
 

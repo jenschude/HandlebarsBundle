@@ -7,9 +7,10 @@ namespace JaySDe\HandlebarsBundle\Tests\Loader;
 
 use JaySDe\HandlebarsBundle\Error\LoaderException;
 use JaySDe\HandlebarsBundle\Loader\FilesystemLoader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 
-class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
+class FilesystemLoaderTest extends TestCase
 {
     public function testGetSource()
     {

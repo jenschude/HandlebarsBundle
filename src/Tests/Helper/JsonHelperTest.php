@@ -8,8 +8,9 @@ namespace JaySDe\HandlebarsBundle\Tests\Helper;
 
 
 use JaySDe\HandlebarsBundle\Helper\JsonHelper;
+use PHPUnit\Framework\TestCase;
 
-class JsonHelperTest extends \PHPUnit_Framework_TestCase
+class JsonHelperTest extends TestCase
 {
     public function testHandle()
     {

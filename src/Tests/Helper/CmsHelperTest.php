@@ -8,8 +8,9 @@ namespace JaySDe\HandlebarsBundle\Tests\Helper;
 
 
 use JaySDe\HandlebarsBundle\Helper\CmsHelper;
+use PHPUnit\Framework\TestCase;
 
-class CmsHelperTest extends \PHPUnit_Framework_TestCase
+class CmsHelperTest extends TestCase
 {
     public function testHandle()
     {

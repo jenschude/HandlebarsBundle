@@ -8,9 +8,12 @@ namespace JaySDe\HandlebarsBundle\Tests;
 
 
 use JaySDe\HandlebarsBundle\HandlebarsProfileExtension;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Component\Stopwatch\StopwatchEvent;
 
-class HandlebarsProfileExtensionTest extends \PHPUnit_Framework_TestCase
+class HandlebarsProfileExtensionTest extends TestCase
 {
     public function testEnterLeave()
     {
@@ -18,9 +21,9 @@ class HandlebarsProfileExtensionTest extends \PHPUnit_Framework_TestCase
         $mainProfile->addProfile(Argument::type('Twig_Profiler_Profile'))->shouldBeCalled();
         $mainProfile->leave()->shouldBeCalled();
 
-        $watchEvent = $this->prophesize('Symfony\Component\Stopwatch\StopwatchEvent');
+        $watchEvent = $this->prophesize(StopwatchEvent::class);
         $watchEvent->stop()->shouldBeCalled();
-        $watch = $this->prophesize('Symfony\Component\Stopwatch\Stopwatch');
+        $watch = $this->prophesize(Stopwatch::class);
         $watch->start('test', 'template')->willReturn($watchEvent->reveal())->shouldBeCalled();
 
         $profiler = new HandlebarsProfileExtension($mainProfile->reveal(), $watch->reveal());

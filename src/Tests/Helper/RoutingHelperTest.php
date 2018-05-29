@@ -8,9 +8,10 @@ namespace JaySDe\HandlebarsBundle\Tests\Helper;
 
 
 use JaySDe\HandlebarsBundle\Helper\RoutingHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class RoutingHelperTest extends \PHPUnit_Framework_TestCase
+class RoutingHelperTest extends TestCase
 {
     public function testUrl()
     {

@@ -8,8 +8,9 @@ namespace JaySDe\HandlebarsBundle\Tests\Helper;
 
 
 use JaySDe\HandlebarsBundle\Helper\TranslationHelper;
+use PHPUnit\Framework\TestCase;
 
-class TranslationHelperTest extends \PHPUnit_Framework_TestCase
+class TranslationHelperTest extends TestCase
 {
     public function testTranslate()
     {

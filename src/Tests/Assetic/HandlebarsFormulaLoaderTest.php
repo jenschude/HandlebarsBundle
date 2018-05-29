@@ -8,8 +8,9 @@ namespace JaySDe\HandlebarsBundle\Tests\Assetic;
 
 
 use JaySDe\HandlebarsBundle\Assetic\HandlebarsFormulaLoader;
+use PHPUnit\Framework\TestCase;
 
-class HandlebarsFormulaLoaderTest extends \PHPUnit_Framework_TestCase
+class HandlebarsFormulaLoaderTest extends TestCase
 {
     public function testLoad()
     {

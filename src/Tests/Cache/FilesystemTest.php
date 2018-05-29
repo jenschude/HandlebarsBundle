@@ -8,9 +8,10 @@ namespace JaySDe\HandlebarsBundle\Tests\Cache;
 
 
 use JaySDe\HandlebarsBundle\Cache\Filesystem;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\FileResource;
 
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+class FilesystemTest extends TestCase
 {
     protected function tearDown()
     {

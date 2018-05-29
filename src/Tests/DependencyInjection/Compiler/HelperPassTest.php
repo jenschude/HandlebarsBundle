@@ -8,10 +8,11 @@ namespace JaySDe\HandlebarsBundle\Tests\DependencyInjection\Compiler;
 
 
 use JaySDe\HandlebarsBundle\DependencyInjection\Compiler\HelperPass;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\DependencyInjection\Reference;
 
-class HelperPassTest extends \PHPUnit_Framework_TestCase
+class HelperPassTest extends TestCase
 {
     public function testTagging()
     {

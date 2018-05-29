@@ -13,12 +13,13 @@ use JaySDe\HandlebarsBundle\HandlebarsProfileExtension;
 use JaySDe\HandlebarsBundle\Loader\FilesystemLoader;
 use JaySDe\HandlebarsBundle\Tests\Fixtures\TestBundle\TestBundle;
 use LightnCandy\LightnCandy;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Templating\TemplateNameParser;
 
-class FunctionalTest extends \PHPUnit_Framework_TestCase
+class FunctionalTest extends TestCase
 {
     public function testRender()
     {

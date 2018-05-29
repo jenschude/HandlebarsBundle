@@ -9,14 +9,16 @@ namespace JaySDe\HandlebarsBundle\Tests;
 
 use JaySDe\HandlebarsBundle\HandlebarsHelperService;
 use JaySDe\HandlebarsBundle\Tests\Fixtures\InvokeHelper;
+use PHPUnit\Framework\TestCase;
 
-class HandlebarsHelperTest extends \PHPUnit_Framework_TestCase
+class HandlebarsHelperTest extends TestCase
 {
     public function testAddHelper()
     {
         $helperService = new HandlebarsHelperService();
         $observer = $this->prophesize('\JaySDe\HandlebarsBundle\Helper\HelperInterface');
-        $helperService->addHelper('test', $observer);
+        $helperService->addHelper('test', $observer->reveal());
+        $this->assertContains('test', $helperService->getHelperMethods());
     }
 
     public function testGetHelperMethods()

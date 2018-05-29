@@ -9,6 +9,7 @@ namespace JaySDe\HandlebarsBundle\Tests\DependencyInjection;
 
 use JaySDe\HandlebarsBundle\DependencyInjection\HandlebarsExtension;
 use LightnCandy\LightnCandy;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileExistenceResource;
@@ -19,7 +20,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
+class HandlebarsExtensionTest extends TestCase
 {
     public function testLoad()
     {
@@ -34,10 +35,10 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $loaderDefinition = $this->prophesize('Symfony\Component\DependencyInjection\Definition');
         $loaderDefinition->addMethodCall("addPath", [$resourceDir])->shouldBeCalled();
 
+        $container->fileExists(Argument::any())->willReturn(true);
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))
-            ->shouldBeCalled();
+        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')));
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -88,10 +89,10 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $loaderDefinition = $this->prophesize('Symfony\Component\DependencyInjection\Definition');
         $loaderDefinition->addMethodCall("addPath", [$resourceDir])->shouldBeCalled();
 
+        $container->fileExists(Argument::any())->willReturn(true);
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))
-            ->shouldBeCalled();
+        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')));
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -106,7 +107,7 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $container->setParameter("handlebars.translation.interpolation_suffix", '%')->shouldBeCalled();
         $container->getParameter('kernel.bundles')->willReturn([])->shouldBeCalled();
         $container->setParameter('handlebars.assetic', true)->shouldBeCalled();
-        $container->addResource(new FileResource($bundleDir . '/Resources/config/assetic.xml'))->shouldBeCalled();
+        $container->addResource(new FileResource($bundleDir . '/Resources/config/assetic.xml'));
 
         $container->getDefinition("handlebars.loader.filesystem")
             ->willReturn($loaderDefinition->reveal())->shouldBeCalled();
@@ -142,10 +143,10 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/Resources/TestBundle/views', 'Test'])->shouldBeCalled();
         $loaderDefinition->addMethodCall("addPath", [$kernelDir . '/TestBundle/Resources/views', 'Test'])->shouldBeCalled();
 
+        $container->fileExists(Argument::any())->willReturn(true);
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))
-            ->shouldBeCalled();
+        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')));
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -198,10 +199,10 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $loaderDefinition->addMethodCall("addPath", [$resourceDir])->shouldBeCalled();
         $loaderDefinition->addMethodCall("addPath", ["%kernel.root_dir%/Resources/views"])->shouldBeCalled();
 
+        $container->fileExists(Argument::any())->willReturn(true);
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))
-            ->shouldBeCalled();
+        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')));
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -251,10 +252,10 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $loaderDefinition = $this->prophesize('Symfony\Component\DependencyInjection\Definition');
         $loaderDefinition->addMethodCall("addPath", [$resourceDir])->shouldBeCalled();
 
+        $container->fileExists(Argument::any())->willReturn(true);
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))
-            ->shouldBeCalled();
+        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')));
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -315,10 +316,10 @@ class HandlebarsExtensionTest extends \PHPUnit_Framework_TestCase
         $loaderDefinition = $this->prophesize('Symfony\Component\DependencyInjection\Definition');
         $loaderDefinition->addMethodCall("addPath", [$resourceDir])->shouldBeCalled();
 
+        $container->fileExists(Argument::any())->willReturn(true);
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))
-            ->shouldBeCalled();
+        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')));
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')

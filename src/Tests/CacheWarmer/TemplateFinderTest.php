@@ -8,9 +8,10 @@ namespace JaySDe\HandlebarsBundle\Tests\CacheWarmer;
 
 
 use JaySDe\HandlebarsBundle\CacheWarmer\TemplateFinder;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Templating\TemplateNameParser;
 
-class TemplateFinderTest extends \PHPUnit_Framework_TestCase
+class TemplateFinderTest extends TestCase
 {
     public function testFindAllTemplates()
     {

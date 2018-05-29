@@ -7,8 +7,9 @@
 namespace JaySDe\HandlebarsBundle\Tests\Helper;
 
 use JaySDe\HandlebarsBundle\Helper\EsiHelper;
+use PHPUnit\Framework\TestCase;
 
-class EsiHelperTest extends \PHPUnit_Framework_TestCase
+class EsiHelperTest extends TestCase
 {
     public function testFragmentRenderer()
     {
