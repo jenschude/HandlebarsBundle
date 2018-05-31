@@ -37,10 +37,11 @@ class HandlebarsExtensionTest extends TestCase
 
         if (in_array('fileExists', get_class_methods('Symfony\Component\DependencyInjection\ContainerBuilder'))) {
             $container->fileExists(Argument::any())->willReturn(true);
+        } else {
+            $container->addResource(Argument::which('getResource', realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         }
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -93,10 +94,12 @@ class HandlebarsExtensionTest extends TestCase
 
         if (in_array('fileExists', get_class_methods('Symfony\Component\DependencyInjection\ContainerBuilder'))) {
             $container->fileExists(Argument::any())->willReturn(true);
+        } else {
+            $container->addResource(Argument::which('getResource', realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
+            $container->addResource(new FileResource($bundleDir . '/Resources/config/assetic.xml'))->shouldBeCalled();
         }
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -111,7 +114,6 @@ class HandlebarsExtensionTest extends TestCase
         $container->setParameter("handlebars.translation.interpolation_suffix", '%')->shouldBeCalled();
         $container->getParameter('kernel.bundles')->willReturn([])->shouldBeCalled();
         $container->setParameter('handlebars.assetic', true)->shouldBeCalled();
-        $container->addResource(new FileResource($bundleDir . '/Resources/config/assetic.xml'))->shouldBeCalled();
 
         $container->getDefinition("handlebars.loader.filesystem")
             ->willReturn($loaderDefinition->reveal())->shouldBeCalled();
@@ -149,10 +151,11 @@ class HandlebarsExtensionTest extends TestCase
 
         if (in_array('fileExists', get_class_methods('Symfony\Component\DependencyInjection\ContainerBuilder'))) {
             $container->fileExists(Argument::any())->willReturn(true);
+        } else {
+            $container->addResource(Argument::which('getResource', realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         }
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -207,10 +210,11 @@ class HandlebarsExtensionTest extends TestCase
 
         if (in_array('fileExists', get_class_methods('Symfony\Component\DependencyInjection\ContainerBuilder'))) {
             $container->fileExists(Argument::any())->willReturn(true);
+        } else {
+            $container->addResource(Argument::which('getResource', realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         }
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -262,10 +266,11 @@ class HandlebarsExtensionTest extends TestCase
 
         if (in_array('fileExists', get_class_methods('Symfony\Component\DependencyInjection\ContainerBuilder'))) {
             $container->fileExists(Argument::any())->willReturn(true);
+        } else {
+            $container->addResource(Argument::which('getResource', realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         }
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
@@ -328,10 +333,11 @@ class HandlebarsExtensionTest extends TestCase
 
         if (in_array('fileExists', get_class_methods('Symfony\Component\DependencyInjection\ContainerBuilder'))) {
             $container->fileExists(Argument::any())->willReturn(true);
+        } else {
+            $container->addResource(Argument::which('getResource', realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         }
         $container->getParameterBag()->willReturn($parameterBag->reveal());
         $container->hasExtension(Argument::any())->willReturn(false);
-        $container->addResource(new FileResource(realpath(__DIR__ . '/../../Resources/config/handlebars.xml')))->shouldBeCalled();
         $container->setDefinition(
             Argument::type('string'),
             Argument::type('Symfony\Component\DependencyInjection\Definition')
