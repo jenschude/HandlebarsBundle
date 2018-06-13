@@ -3,7 +3,7 @@
  * @author @jenschude <jens.schulze@commercetools.de>
  */
 
-namespace JaySDe\HandlebarsBundle\Tests\Extension;
+namespace JaySDe\HandlebarsBundle\Extension;
 
 use JaySDe\HandlebarsBundle\HandlebarsEngine;
 

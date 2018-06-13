@@ -11,7 +11,7 @@ use JaySDe\HandlebarsBundle\HandlebarsEnvironment;
 use JaySDe\HandlebarsBundle\HandlebarsHelperService;
 use JaySDe\HandlebarsBundle\HandlebarsProfileExtension;
 use JaySDe\HandlebarsBundle\Loader\FilesystemLoader;
-use JaySDe\HandlebarsBundle\Tests\Extension\HandlebarsTwigExtension;
+use JaySDe\HandlebarsBundle\Extension\HandlebarsTwigExtension;
 use JaySDe\HandlebarsBundle\Tests\Fixtures\TestBundle\TestBundle;
 use LightnCandy\LightnCandy;
 use PHPUnit\Framework\TestCase;
