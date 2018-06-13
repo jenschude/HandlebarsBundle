@@ -19,7 +19,7 @@ class TemplateFinderTest extends TestCase
         $finder = new TemplateFinder($parser, [__DIR__ . '/../Fixtures/Resources/views']);
 
         $templates = $finder->findAllTemplates();
-        $this->assertCount(3, $templates);
+        $this->assertCount(5, $templates);
 
         $names = [];
         foreach ($templates as $template) {
@@ -27,7 +27,7 @@ class TemplateFinderTest extends TestCase
             $names[] = $template->getLogicalName();
         }
         sort($names);
-        $this->assertSame(['layout.html.hbs', 'main.hbs', 'partial.handlebars'], $names);
+        $this->assertSame(['layout.html.hbs', 'main.hbs', 'partial.handlebars', 'test.hbs', 'test.html.twig'], $names);
     }
 
     public function testRunOnce()
@@ -36,7 +36,7 @@ class TemplateFinderTest extends TestCase
         $finder = new TemplateFinder($parser, [__DIR__ . '/../Fixtures/Resources/views']);
 
         $templates = $finder->findAllTemplates();
-        $this->assertCount(3, $templates);
+        $this->assertCount(5, $templates);
         $this->assertSame($templates, $finder->findAllTemplates());
     }
 }
