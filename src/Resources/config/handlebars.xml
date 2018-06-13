@@ -86,7 +86,7 @@
         </service>
         <service id="handlebars.twig_extension" class="JaySDe\HandlebarsBundle\Tests\Extension\HandlebarsTwigExtension">
             <tag name="twig.extension"/>
-            <argument type="service" id="handlebars"/>
+            <argument type="service" id="templating.engine.handlebars"/>
         </service>
     </services>
 </container>

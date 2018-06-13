@@ -5,15 +5,15 @@
 
 namespace JaySDe\HandlebarsBundle\Tests\Extension;
 
-use JaySDe\HandlebarsBundle\HandlebarsEnvironment;
+use JaySDe\HandlebarsBundle\HandlebarsEngine;
 
 class HandlebarsTwigExtension extends \Twig_Extension
 {
-    private $environment;
+    private $engine;
 
-    public function __construct(HandlebarsEnvironment $environment)
+    public function __construct(HandlebarsEngine $environment)
     {
-        $this->environment = $environment;
+        $this->engine = $environment;
 
     }
     public function getFunctions()
@@ -25,6 +25,6 @@ class HandlebarsTwigExtension extends \Twig_Extension
 
     public function renderHandlebars($name, array $data = [])
     {
-        return $this->environment->render($name, $data);
+        return $this->engine->render($name, $data);
     }
 }

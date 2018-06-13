@@ -45,10 +45,12 @@ class FunctionalTest extends TestCase
             $cache,
             $profiler
         );
+        $engine = new HandlebarsEngine($environment, $parser);
+
 
         $loader = new \Twig_Loader_Filesystem(__DIR__ . '/Fixtures/Resources/views');
         $twig = new \Twig_Environment($loader);
-        $twig->addExtension(new HandlebarsTwigExtension($environment));
+        $twig->addExtension(new HandlebarsTwigExtension($engine));
         $result = $twig->render('test.html.twig');
 
         $this->assertSame('Hello world!', trim($result));
