@@ -3,13 +3,13 @@ php:
 - "5.6"
 - "7.0"
 - "7.1"
+- "7.2"
+- "nightly"
 - "hhvm"
-- nightly
 matrix:
   allow_failures:
-  - php: "7.1"
-  - php: hhvm
   - php: nightly
+  - php: hhvm
 cache:
   directories:
   - vendor

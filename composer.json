@@ -2,7 +2,7 @@
   "name": "jays-de/handlebars-bundle",
   "type": "symfony-bundle",
   "license": "MIT",
-  "homepage": "https://github.com/jayS-de/HandlebarsBundle",
+  "homepage": "https://github.com/jenschude/HandlebarsBundle",
   "description": "This Symfony bundle provides integration for the handlebars template engine.",
   "keywords": ["templating", "handlebars", "symfony"],
   "authors": [
@@ -12,11 +12,11 @@
     },
     {
       "name": "Community contributions",
-      "homepage": "https://github.com/jays-de/HandlebarsBundle/contributors"
+      "homepage": "https://github.com/jenschude/HandlebarsBundle/contributors"
     }
   ],
   "support": {
-    "issues": "https://github.com/jays-de/HandlebarsBundle/issues"
+    "issues": "https://github.com/jenschude/HandlebarsBundle/issues"
   },
   "require": {
     "php": ">=5.5",
