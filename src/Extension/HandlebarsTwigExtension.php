@@ -19,12 +19,17 @@ class HandlebarsTwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_Function('render_hbs', [$this, 'renderHandlebars'])
+            new \Twig_SimpleFunction('render_hbs', [$this, 'renderHandlebars'])
         ];
     }
 
     public function renderHandlebars($name, array $data = [])
     {
         return $this->engine->render($name, $data);
+    }
+
+    public function getName()
+    {
+        return 'HandlebarsTwigExtension';
     }
 }
