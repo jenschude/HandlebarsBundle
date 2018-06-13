@@ -84,5 +84,9 @@
             <tag name="data_collector" template="@Handlebars/handlebars.html.twig" id="handlebars" />
             <argument type="service" id="handlebars.profile" />
         </service>
+        <service id="handlebars.twig_extension" class="JaySDe\HandlebarsBundle\Tests\Extension\HandlebarsTwigExtension">
+            <tag name="twig.extension"/>
+            <argument type="service" id="handlebars"/>
+        </service>
     </services>
 </container>
